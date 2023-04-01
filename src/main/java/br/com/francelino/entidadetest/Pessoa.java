@@ -8,27 +8,34 @@ package br.com.francelino.entidadetest;
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
-public class Entidade {
-
-    private long id;
+public class Pessoa
+        extends Entidade {
+    
+    private String nome;
 //<editor-fold defaultstate="collapsed" desc="construtores">
     
-    public Entidade(){
+    public Pessoa(){
         
     }
-    public Entidade(long id) {
-        this.id = id;
+    
+    public Pessoa(String nome, long id) {
+        super(id);
+        this.nome = nome;
     }
+    
 //</editor-fold>
     
 //<editor-fold defaultstate="collapsed" desc="getters and setters">
     
-    public long getId() {
-        return id;
+    public String getNome() {
+        return nome;
     }
     
-    public void setId(long id) {
-        this.id = id;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
+    
 //</editor-fold>
+    
+
 }

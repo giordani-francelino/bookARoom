@@ -8,7 +8,7 @@ package br.com.francelino.entidadetest;
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
-public class EntidadeTeste {
+public class EntidadeTest {
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
