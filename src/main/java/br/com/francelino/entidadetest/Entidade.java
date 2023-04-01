@@ -1,4 +1,4 @@
-package br.com.francelino.entidadeteste;
+package br.com.francelino.entidadetest;
 
 /**
  *
