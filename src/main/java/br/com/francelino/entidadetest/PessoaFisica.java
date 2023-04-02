@@ -37,5 +37,14 @@ public class PessoaFisica
     
 //</editor-fold>
 
+    @Override
+    public String toString() {
+        return "PessoaFisica{" 
+                + "id=" + getId() 
+                + " nome=" + getNome() 
+                + " cpf=" + cpf 
+                + '}';
+    }
+
     
 }

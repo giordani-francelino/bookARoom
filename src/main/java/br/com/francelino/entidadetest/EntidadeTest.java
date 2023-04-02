@@ -11,6 +11,17 @@ package br.com.francelino.entidadetest;
 public class EntidadeTest {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        Entidade e = new Entidade(123L);
+        Entidade p = new Pessoa("Pessoa",123L);
+        Entidade pf = new PessoaFisica(43514090610L,"PessoaFisica",123L);
+        System.out.println(e);
+        System.out.println(p);
+        System.out.println(pf);
+        AcessoDados ad = new PessoaFisicaAcessoDados();
+        ad.salvar(e);
+//        ad.salvar(p);
+ad.salvar(pf);
+        ((PessoaFisicaAcessoDados) ad).salvar(pf);
+        
     }
 }

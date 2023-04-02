@@ -36,6 +36,14 @@ public class Pessoa
     }
     
 //</editor-fold>
+
+    @Override
+    public String toString() {
+        return "Pessoa{" 
+                + "id=" + getId() 
+                + " nome=" + nome 
+                + '}';
+    }
     
 
 }

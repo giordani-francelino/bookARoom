@@ -31,4 +31,11 @@ public class Entidade {
         this.id = id;
     }
 //</editor-fold>
+
+    @Override
+    public String toString() {
+        return "Entidade{" + "id=" + id + '}';
+    }
+    
+    
 }
