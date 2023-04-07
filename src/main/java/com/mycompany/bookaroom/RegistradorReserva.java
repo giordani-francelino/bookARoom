@@ -17,8 +17,6 @@
  */
 package com.mycompany.bookaroom;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 /**
@@ -76,6 +74,7 @@ public class RegistradorReserva {
             }
         }
         BancoDeDados.gravaReserva(reserva);
+        System.out.print("Reserva gravada com sucesso.\n");
         return true;
     }
 
@@ -88,8 +87,9 @@ public class RegistradorReserva {
                 BancoDeDados.excluiReservaEquipamento(c);
             }
         }
-
-        return BancoDeDados.excluiReserva(reserva);
+        BancoDeDados.excluiReserva(reserva);
+        System.out.println("Reserva cancelada com sucesso\n");
+        return true;
     }
 
     public boolean gerarReservaEquipamento() throws Exception {
@@ -112,13 +112,16 @@ public class RegistradorReserva {
                 }
             }
         }
-
-        return BancoDeDados.gravaReservaEquipamento(reservaEquipamento);
+        BancoDeDados.gravaReservaEquipamento(reservaEquipamento);
+        System.out.println("Equipamento reservado com sucesso");
+        return true;
     }
 
     public boolean cancelarReservaEquipamento() throws Exception {
+        BancoDeDados.excluiReservaEquipamento(reservaEquipamento);
+        System.out.println("Reserva de equipamento cancelada com sucesso.");
 
-        return BancoDeDados.excluiReservaEquipamento(reservaEquipamento);
+        return true;
     }
 
 //    

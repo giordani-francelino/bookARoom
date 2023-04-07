@@ -69,7 +69,7 @@ public class BookARoom {
             if (Integer.parseInt(s) == 0) {
                 break;
             } else if (Integer.parseInt(s) == 1) {
-                // efetuar reserva
+// efetuar reserva
                 obterDadosReserva();
                 String assunto;
                 System.out.print("Digite o assunto da reserva:\n");
@@ -78,19 +78,15 @@ public class BookARoom {
                 try {
                     registradorReserva.setReserva(reserva);
                     registradorReserva.gerarReserva();
-                    System.out.print("Reserva gravada com sucesso.\n");
-                    System.out.println(reserva + "\n");
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
             } else if (Integer.parseInt(s) == 2) {
-                // cancelar reserva 
+// cancelar reserva 
                 obterDadosReserva();
-
                 try {
                     registradorReserva.setReserva(reserva);
                     registradorReserva.cancelarReserva();
-                    System.out.println("Reserva cancelada com sucesso\n");
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -192,8 +188,6 @@ public class BookARoom {
                 try {
                     obterDadosEquipamento();
                     registradorReserva.gerarReservaEquipamento();
-                    System.out.println("Equipamento reservado com sucesso");
-
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -202,7 +196,6 @@ public class BookARoom {
                 try {
                     obterDadosEquipamento();
                     registradorReserva.cancelarReservaEquipamento();
-                    System.out.println("Reserva de equipamento cancelada.");
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
