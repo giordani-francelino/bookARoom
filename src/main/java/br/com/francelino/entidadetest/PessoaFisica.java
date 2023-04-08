@@ -25,7 +25,7 @@ public class PessoaFisica
     
 //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="getters and setters">
+//<editor-fold defaultstate="collapsed" desc="getters and setters">
     
     public long getCpf() {
         return cpf;
@@ -37,14 +37,17 @@ public class PessoaFisica
     
 //</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="metodos">
+    
     @Override
     public String toString() {
-        return "PessoaFisica{" 
-                + "id=" + getId() 
-                + " nome=" + getNome() 
-                + " cpf=" + cpf 
+        return "PessoaFisica{"
+                + "id=" + getId()
+                + " nome=" + getNome()
+                + " cpf=" + cpf
                 + '}';
     }
-
+    
+//</editor-fold>
     
 }

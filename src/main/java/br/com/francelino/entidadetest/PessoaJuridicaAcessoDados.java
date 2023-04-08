@@ -25,10 +25,10 @@ public class PessoaJuridicaAcessoDados
 
 
         
-        return "INSERT INTO pessoaJuridica (" 
+        return "\"INSERT INTO pessoaJuridica (" 
                 + id + ", '"
                 + nome + "', "
-                + cnpj + ") VALUES(?,?,?)"
+                + cnpj + ") VALUES(?,?,?);\""
         ;
         
         

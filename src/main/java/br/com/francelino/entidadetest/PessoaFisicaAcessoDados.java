@@ -26,10 +26,10 @@ public class PessoaFisicaAcessoDados
 
 
         
-        return "INSERT INTO pessoaFisica (" 
+        return "\"INSERT INTO pessoaFisica (" 
                 + id + ", '"
                 + nome + "', "
-                + cpf + ") VALUES(?,?,?)"
+                + cpf + ") VALUES(?,?,?);\""
         ;
     }
  

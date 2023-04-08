@@ -9,35 +9,27 @@ package br.com.francelino.entidadetest;
  * @author Artur Pereira Neto &lt; artur.neto@ifnmg.edu.br &gt;
  */
 public class PessoaJuridica extends Pessoa {
-    
-    
-//<editor-fold defaultstate="collapsed" desc="atributos">
-    
-    private long cnpj;
-    
-//</editor-fold>
-   
-//<editor-fold defaultstate="collapsed" desc="construtores">
 
+//<editor-fold defaultstate="collapsed" desc="atributos">
+    private long cnpj;
+
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="construtores">
     public PessoaJuridica() {
     }
 
-    
-    
     public PessoaJuridica(long cnpj) {
         this.cnpj = cnpj;
     }
 
-    
     public PessoaJuridica(long cnpj, String nome, long id) {
         super(nome, id);
         this.cnpj = cnpj;
     }
-   
+
 //</editor-fold>
-       
 //<editor-fold defaultstate="collapsed" desc="getters and setters">
-        public long getCnpj() {
+    public long getCnpj() {
         return cnpj;
     }
 
@@ -47,19 +39,14 @@ public class PessoaJuridica extends Pessoa {
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="metodos">
-    
-        @Override
+    @Override
     public String toString() {
         return "Pessoa Juridica={"
-                +"id= "+this.getId()
-                +"nome= "+ this.getNome()
-                +"CNPJ= "+this.getCnpj()
-                +"}";
+                + "id= " + this.getId()
+                + " nome= " + this.getNome()
+                + " CNPJ= " + this.getCnpj()
+                + "}";
     }
-    
+
 //</editor-fold>
-
-
-    
-    
 }
