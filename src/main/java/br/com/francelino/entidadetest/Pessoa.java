@@ -10,11 +10,15 @@ package br.com.francelino.entidadetest;
  */
 public class Pessoa
         extends Entidade {
-    
-    private String nome;
+  
+//<editor-fold defaultstate="collapsed" desc="atributos">
+        private String nome;
+//</editor-fold>
+     
+
 //<editor-fold defaultstate="collapsed" desc="construtores">
     
-    public Pessoa(){
+    public Pessoa() {
         
     }
     
@@ -35,8 +39,13 @@ public class Pessoa
         this.nome = nome;
     }
     
+    
+    
+    
 //</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="metodos">
+    
     @Override
     public String toString() {
         return "Pessoa{" 
@@ -44,6 +53,11 @@ public class Pessoa
                 + " nome=" + nome 
                 + '}';
     }
+    
+//</editor-fold>
+    
+    
+    
     
 
 }

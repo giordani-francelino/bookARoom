@@ -10,7 +10,11 @@ package br.com.francelino.entidadetest;
  */
 public class Entidade {
 
-    private long id;
+//<editor-fold defaultstate="collapsed" desc="atributos">
+        private long id;
+//</editor-fold>
+    
+
 //<editor-fold defaultstate="collapsed" desc="construtores">
     
     public Entidade(){
@@ -20,6 +24,7 @@ public class Entidade {
         this.id = id;
     }
 //</editor-fold>
+    
     
 //<editor-fold defaultstate="collapsed" desc="getters and setters">
     
@@ -32,10 +37,18 @@ public class Entidade {
     }
 //</editor-fold>
 
-    @Override
+//<editor-fold defaultstate="collapsed" desc="metodos">
+    
+        @Override
     public String toString() {
         return "Entidade{" + "id=" + id + '}';
     }
+    
+//</editor-fold>
+    
+    
+    
+
     
     
 }

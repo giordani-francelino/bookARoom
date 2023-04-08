@@ -9,13 +9,17 @@ package br.com.francelino.entidadetest;
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
 public class AcessoDados {
-
-    public void salvar(Entidade o) {
-        System.out.println(this.gerarSqlInsercao(o));
+    
+        public Entidade e1 =new Entidade();
+     
+    
+        public void salvar(Entidade e1) {
+        System.out.println(this.gerarSqlInsercao(e1));
     }
 
-    public String gerarSqlInsercao(Entidade o) {
-        return null;
+    public String gerarSqlInsercao(Entidade e1) {
+        //return null;
+        return"aqui ej nulo";
     }
     
 

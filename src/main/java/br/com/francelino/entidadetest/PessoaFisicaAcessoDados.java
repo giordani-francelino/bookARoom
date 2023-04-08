@@ -19,8 +19,12 @@ public class PessoaFisicaAcessoDados
         String nome;
         long cpf;
         id = o.getId();
-        nome = ((Pessoa) o).getNome();
+//        nome = ((Pessoa) o).getNome();
+      
+        nome = ((PessoaFisica)o).getNome();
         cpf = ((PessoaFisica) o).getCpf();
+
+
         
         return "INSERT INTO pessoaFisica (" 
                 + id + ", '"
