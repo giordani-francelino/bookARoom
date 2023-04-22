@@ -17,6 +17,13 @@
  */
 package com.mycompany.bookaroom;
 
+import com.mycompany.bookaroom.negocio.ItemEquipamento;
+import com.mycompany.bookaroom.negocio.Reserva;
+import com.mycompany.bookaroom.cadastro.Equipamento;
+import com.mycompany.bookaroom.cadastro.Funcionario;
+import com.mycompany.bookaroom.cadastro.SalaReuniao;
+import com.mycompany.bookaroom.cadastro.Predio;
+import com.mycompany.bookaroom.cadastro.Campus;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -78,14 +85,14 @@ public class BancoDeDados {
                         System.out.println(ex.getMessage());
                     }
                     
-                    ReservaEquipamento reservaEquipamento = new ReservaEquipamento();
-                    reservaEquipamento.setReserva(reserva);
-                    reservaEquipamento.getEquipamento().setCodigo(item);
-                    reservaEquipamento.getEquipamento().setCampus(campus);
-                    reservaEquipamento.getEquipamento().setNome("Equipamento " + item + " - Campus " + codigoCampus);
+                    ItemEquipamento itemEquipamento = new ItemEquipamento();
+                    itemEquipamento.setReserva(reserva);
+                    itemEquipamento.getEquipamento().setCodigo(item);
+                    itemEquipamento.getEquipamento().setCampus(campus);
+                    itemEquipamento.getEquipamento().setNome("Equipamento " + item + " - Campus " + codigoCampus);
                     item++;
                     try {
-                        BancoDeDados.gravaReservaEquipamento(reservaEquipamento);
+                        BancoDeDados.gravaReservaEquipamento(itemEquipamento);
                     } catch (Exception ex) {
                         System.out.println(ex.getMessage());
                     }
@@ -128,7 +135,7 @@ public class BancoDeDados {
     private static ArrayList<Funcionario> funcionarios = new ArrayList<Funcionario>();
     private static ArrayList<Equipamento> equipamentos = new ArrayList<Equipamento>();
     private static ArrayList<Reserva> reservas = new ArrayList<Reserva>();
-    private static ArrayList<ReservaEquipamento> reservaEquipamentos=new ArrayList<ReservaEquipamento>();
+    private static ArrayList<ItemEquipamento> itemEquipamentos=new ArrayList<ItemEquipamento>();
 
 //<editor-fold defaultstate="collapsed" desc="crud campus">
     public static boolean consultaCampus(Campus campus) {
@@ -459,34 +466,34 @@ public class BancoDeDados {
     }
 
 //</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="crud reservaEquipamento">
-    public static boolean consultaReservaEquipamento(ReservaEquipamento reservaEquipamento) {
-        for (Iterator<ReservaEquipamento> iterator = reservaEquipamentos.iterator(); iterator.hasNext();) {
-            ReservaEquipamento c = iterator.next();
-            if (reservaEquipamento.equals(c)) {
+//<editor-fold defaultstate="collapsed" desc="crud itemEquipamento">
+    public static boolean consultaReservaEquipamento(ItemEquipamento itemEquipamento) {
+        for (Iterator<ItemEquipamento> iterator = itemEquipamentos.iterator(); iterator.hasNext();) {
+            ItemEquipamento c = iterator.next();
+            if (itemEquipamento.equals(c)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean gravaReservaEquipamento(ReservaEquipamento reservaEquipamento) throws Exception {
-        if (consultaReservaEquipamento(reservaEquipamento)) {
+    public static boolean gravaReservaEquipamento(ItemEquipamento itemEquipamento) throws Exception {
+        if (consultaReservaEquipamento(itemEquipamento)) {
             throw new Exception("Equipamento já reservado para essa data/horário.");
         }
-        ReservaEquipamento re = new ReservaEquipamento(reservaEquipamento);
-        reservaEquipamentos.add(re);
+        ItemEquipamento re = new ItemEquipamento(itemEquipamento);
+        itemEquipamentos.add(re);
         return true;
     }
 
-    public static boolean excluiReservaEquipamento(ReservaEquipamento reservaEquipamento) throws Exception {
-        if (!consultaReservaEquipamento(reservaEquipamento)) {
+    public static boolean excluiReservaEquipamento(ItemEquipamento itemEquipamento) throws Exception {
+        if (!consultaReservaEquipamento(itemEquipamento)) {
  
             throw new Exception("Equipamento não reservado para essa data/horário.");
         }
-        for (Iterator<ReservaEquipamento> iterator = reservaEquipamentos.iterator(); iterator.hasNext();) {
-            ReservaEquipamento c = iterator.next();
-            if (reservaEquipamento.equals(c)) {
+        for (Iterator<ItemEquipamento> iterator = itemEquipamentos.iterator(); iterator.hasNext();) {
+            ItemEquipamento c = iterator.next();
+            if (itemEquipamento.equals(c)) {
                 iterator.remove();
                 return true;
             }
@@ -494,10 +501,10 @@ public class BancoDeDados {
         return true;
     }
 
-    public static ReservaEquipamento recuperaReservaEquipamento(int codigo, int codigoSalaReuniao, int codigoPredio,
+    public static ItemEquipamento recuperaReservaEquipamento(int codigo, int codigoSalaReuniao, int codigoPredio,
             int codigoCampus, LocalDate dataReserva, LocalTime horaInicio, LocalTime horaFim) throws Exception {
-        for (Iterator<ReservaEquipamento> iterator = reservaEquipamentos.iterator(); iterator.hasNext();) {
-            ReservaEquipamento c = iterator.next();
+        for (Iterator<ItemEquipamento> iterator = itemEquipamentos.iterator(); iterator.hasNext();) {
+            ItemEquipamento c = iterator.next();
             if (c.getEquipamento().getCodigo() == codigo
                     && c.getReserva().getSalaReuniao().getCodigo() == codigoSalaReuniao
                     && c.getReserva().getSalaReuniao().getPredio().getCodigo() == codigoPredio
@@ -511,10 +518,10 @@ public class BancoDeDados {
         throw new Exception("ReservaEquipamento não efetuada para essa data e hora.");
     }
 
-    public static ArrayList<ReservaEquipamento> listaReservaEquipamento(int codigoCampus) {
+    public static ArrayList<ItemEquipamento> listaReservaEquipamento(int codigoCampus) {
 
-        ArrayList<ReservaEquipamento> p = new ArrayList<ReservaEquipamento>();
-        for (ReservaEquipamento c : reservaEquipamentos) {
+        ArrayList<ItemEquipamento> p = new ArrayList<ItemEquipamento>();
+        for (ItemEquipamento c : itemEquipamentos) {
             if (c.getEquipamento().getCampus().getCodigo()== codigoCampus) {
                 p.add(c);
             }

@@ -17,6 +17,8 @@
  */
 package com.mycompany.bookaroom;
 
+import com.mycompany.bookaroom.negocio.ItemEquipamento;
+import com.mycompany.bookaroom.negocio.Reserva;
 import java.util.ArrayList;
 
 /**
@@ -26,7 +28,7 @@ import java.util.ArrayList;
 public class RegistradorReserva {
 
     private Reserva reserva = new Reserva();
-    private ReservaEquipamento reservaEquipamento = new ReservaEquipamento();
+    private ItemEquipamento itemEquipamento = new ItemEquipamento();
 
 //<editor-fold defaultstate="collapsed" desc="geters and setters">
     public Reserva getReserva() {
@@ -38,12 +40,12 @@ public class RegistradorReserva {
         this.reserva = reserva;
     }
 
-    public ReservaEquipamento getReservaEquipamento() {
-        return reservaEquipamento;
+    public ItemEquipamento getReservaEquipamento() {
+        return itemEquipamento;
     }
 
-    public void setReservaEquipamento(ReservaEquipamento reservaEquipamento) {
-        this.reservaEquipamento = reservaEquipamento;
+    public void setReservaEquipamento(ItemEquipamento itemEquipamento) {
+        this.itemEquipamento = itemEquipamento;
     }
 
 //</editor-fold>
@@ -80,9 +82,9 @@ public class RegistradorReserva {
 
     public boolean cancelarReserva() throws Exception {
 //ArrayList<ReservaEquipamento> listaReservaEquipamento(int codigoCampus)
-        ArrayList<ReservaEquipamento> reservaEquipamentos
+        ArrayList<ItemEquipamento> itemEquipamentos
                 = BancoDeDados.listaReservaEquipamento(reserva.getSalaReuniao().getPredio().getCampus().getCodigo());
-        for (ReservaEquipamento c : reservaEquipamentos) {
+        for (ItemEquipamento c : itemEquipamentos) {
             if (c.getReserva() == reserva) {
                 BancoDeDados.excluiReservaEquipamento(c);
             }
@@ -93,32 +95,32 @@ public class RegistradorReserva {
     }
 
     public boolean gerarReservaEquipamento() throws Exception {
-        if (!BancoDeDados.consultaEquipamento(reservaEquipamento.getEquipamento())) {
+        if (!BancoDeDados.consultaEquipamento(itemEquipamento.getEquipamento())) {
             throw new Exception("Equipamento não cadastrado.");
         }
-        if (!BancoDeDados.consultaReserva(reservaEquipamento.getReserva())) {
+        if (!BancoDeDados.consultaReserva(itemEquipamento.getReserva())) {
             throw new Exception("Reserva não cadastrada.");
         }
-        ArrayList<ReservaEquipamento> reservaEquipamentos
+        ArrayList<ItemEquipamento> itemEquipamentos
                 = BancoDeDados.listaReservaEquipamento(reserva.getSalaReuniao().getPredio().getCampus().getCodigo());
-        for (ReservaEquipamento c : reservaEquipamentos) {
-            if (c.getReserva().getDataReserva().compareTo(reservaEquipamento.getReserva().getDataReserva()) == 0) {
-                if ((reservaEquipamento.getReserva().getHoraInicio().compareTo(c.getReserva().getHoraInicio()) >= 0
-                        && reservaEquipamento.getReserva().getHoraInicio().compareTo(c.getReserva().getHoraFim()) <= 0)
-                        || (reservaEquipamento.getReserva().getHoraFim().compareTo(c.getReserva().getHoraInicio()) >= 0
-                        && reservaEquipamento.getReserva().getHoraFim().compareTo(c.getReserva().getHoraFim()) <= 0)) {
+        for (ItemEquipamento c : itemEquipamentos) {
+            if (c.getReserva().getDataReserva().compareTo(itemEquipamento.getReserva().getDataReserva()) == 0) {
+                if ((itemEquipamento.getReserva().getHoraInicio().compareTo(c.getReserva().getHoraInicio()) >= 0
+                        && itemEquipamento.getReserva().getHoraInicio().compareTo(c.getReserva().getHoraFim()) <= 0)
+                        || (itemEquipamento.getReserva().getHoraFim().compareTo(c.getReserva().getHoraInicio()) >= 0
+                        && itemEquipamento.getReserva().getHoraFim().compareTo(c.getReserva().getHoraFim()) <= 0)) {
                     throw new Exception("Equipamento já reservado nessa data/horário.");
 
                 }
             }
         }
-        BancoDeDados.gravaReservaEquipamento(reservaEquipamento);
+        BancoDeDados.gravaReservaEquipamento(itemEquipamento);
         System.out.println("Equipamento reservado com sucesso");
         return true;
     }
 
     public boolean cancelarReservaEquipamento() throws Exception {
-        BancoDeDados.excluiReservaEquipamento(reservaEquipamento);
+        BancoDeDados.excluiReservaEquipamento(itemEquipamento);
         System.out.println("Reserva de equipamento cancelada com sucesso.");
 
         return true;

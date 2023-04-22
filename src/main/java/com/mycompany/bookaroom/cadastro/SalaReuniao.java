@@ -15,8 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.mycompany.bookaroom;
+package com.mycompany.bookaroom.cadastro;
 
+import com.mycompany.bookaroom.cadastro.Predio;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;

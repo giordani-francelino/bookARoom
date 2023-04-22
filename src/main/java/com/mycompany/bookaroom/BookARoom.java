@@ -3,6 +3,12 @@
  */
 package com.mycompany.bookaroom;
 
+import com.mycompany.bookaroom.negocio.ItemEquipamento;
+import com.mycompany.bookaroom.negocio.Reserva;
+import com.mycompany.bookaroom.cadastro.Equipamento;
+import com.mycompany.bookaroom.cadastro.Funcionario;
+import com.mycompany.bookaroom.cadastro.SalaReuniao;
+import com.mycompany.bookaroom.cadastro.Campus;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -21,7 +27,7 @@ public class BookARoom {
     private static SalaReuniao salaReuniao = new SalaReuniao();
     private static RegistradorReserva registradorReserva = new RegistradorReserva();
     private static Reserva reserva = new Reserva();
-    private static ReservaEquipamento reservaEquipamento = new ReservaEquipamento();
+    private static ItemEquipamento itemEquipamento = new ItemEquipamento();
     private static int codigoPredio = 0;
     private static int codigoSalaReuniao = 0;
     private static LocalDate dataReserva = LocalDate.now();
@@ -65,15 +71,22 @@ public class BookARoom {
         menuPrincipal();
         while (sc.hasNext()) {
             s = sc.next();
+            try {
+                int eInt = Integer.parseInt(s);
+            } catch (Exception ex) {
+                s = "-1";
+            }
 
             if (Integer.parseInt(s) == 0) {
                 break;
             } else if (Integer.parseInt(s) == 1) {
 // efetuar reserva
                 obterDadosReserva();
-                String assunto;
+                String assunto = "";
                 System.out.print("Digite o assunto da reserva:\n");
-                assunto = sc.next();
+                Scanner as = new Scanner(System.in);
+                assunto = as.nextLine();
+                System.out.println(assunto);
                 reserva.setAssunto(assunto);
                 try {
                     registradorReserva.setReserva(reserva);
@@ -98,7 +111,7 @@ public class BookARoom {
             } else if (Integer.parseInt(s) == 4) {
 //salas livres
                 relatorio.salasLivres(campus);
-  
+
             } else if (Integer.parseInt(s) == 5) {
 // salas ocupadas
                 relatorio.reservasAtivas(campus);
@@ -111,7 +124,7 @@ public class BookARoom {
 // reservas inativas
                 relatorio.reservasInativas(campus);
             } else {
-                break;
+                System.out.println("Opção inválida");
             }
             menuPrincipal();
 
@@ -184,6 +197,11 @@ public class BookARoom {
         subMenu();
         while (sc.hasNext()) {
             s = sc.next();
+            try {
+                int eInt = Integer.parseInt(s);
+            } catch (Exception ex) {
+                s = "-1";
+            }
             if (Integer.parseInt(s) == 1) {
                 try {
                     obterDadosEquipamento();
@@ -200,7 +218,7 @@ public class BookARoom {
                     System.out.println(ex.getMessage());
                 }
             } else {
-                break;
+                System.out.println("Opção inválida");
             }
             subMenu();
         }
@@ -209,15 +227,15 @@ public class BookARoom {
 
     public static void obterDadosEquipamento() {
         String s;
-//        reservaEquipamento = new ReservaEquipamento();
+//        itemEquipamento = new ItemEquipamento();
         System.out.print("Digite o código do equipamento:\n");
         s = sc.next();
         codigoEquipamento = Integer.parseInt(s);
         equipamento.setCodigo(codigoEquipamento);
         equipamento.getCampus().setCodigo(campus.getCodigo());
-        reservaEquipamento.setEquipamento(equipamento);
-        reservaEquipamento.setReserva(reserva);
-        registradorReserva.setReservaEquipamento(reservaEquipamento);
+        itemEquipamento.setEquipamento(equipamento);
+        itemEquipamento.setReserva(reserva);
+        registradorReserva.setReservaEquipamento(itemEquipamento);
     }
 
 }

@@ -17,6 +17,10 @@
  */
 package com.mycompany.bookaroom;
 
+import com.mycompany.bookaroom.negocio.ItemEquipamento;
+import com.mycompany.bookaroom.negocio.Reserva;
+import com.mycompany.bookaroom.cadastro.SalaReuniao;
+import com.mycompany.bookaroom.cadastro.Campus;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -32,7 +36,7 @@ public class Relatorio {
 
     private List<SalaReuniao> salaReuniaos = new ArrayList<SalaReuniao>();
     private List<Reserva> reservas = new ArrayList<Reserva>();
-    private List<ReservaEquipamento> itemEquipamentos = new ArrayList<ReservaEquipamento>();
+    private List<ItemEquipamento> itemEquipamentos = new ArrayList<ItemEquipamento>();
 
     public List<Reserva> reservasAtivas(Campus campus) {
         reservas = BancoDeDados.listaReserva(campus.getCodigo());

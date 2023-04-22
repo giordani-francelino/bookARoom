@@ -15,26 +15,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.mycompany.bookaroom;
+package com.mycompany.bookaroom.negocio;
 
+import com.mycompany.bookaroom.negocio.Reserva;
+import com.mycompany.bookaroom.cadastro.Equipamento;
 import java.util.Objects;
 
 /**
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
-public class ReservaEquipamento {
+public class ItemEquipamento {
 
     private Reserva reserva = new Reserva();
     private Equipamento equipamento = new Equipamento();
     
 //<editor-fold defaultstate="collapsed" desc="construtores">
     
-    public ReservaEquipamento(){
+    public ItemEquipamento(){
         
     }
     
-    public ReservaEquipamento(ReservaEquipamento re){
+    public ItemEquipamento(ItemEquipamento re){
         this.setReserva(new Reserva(re.getReserva()));
         this.setEquipamento(new Equipamento(re.getEquipamento()));
     }
