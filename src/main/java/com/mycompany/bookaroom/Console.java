@@ -1,5 +1,8 @@
 package com.mycompany.bookaroom;
 
+import com.mycompany.bookaroom.bd.Repositorio;
+import com.mycompany.bookaroom.util.RegistradorReserva;
+import com.mycompany.bookaroom.util.GeradorRelatorio;
 import com.mycompany.bookaroom.negocio.ItemEquipamento;
 import com.mycompany.bookaroom.negocio.Reserva;
 import com.mycompany.bookaroom.cadastro.Equipamento;

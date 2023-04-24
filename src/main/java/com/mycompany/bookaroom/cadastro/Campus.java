@@ -17,22 +17,35 @@
  */
 package com.mycompany.bookaroom.cadastro;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+
 /**
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
+@Entity
+@Table
 public class Campus {
 
+    @Id
     private int codigo;
+    @NotNull
+    @Column(length = 100)
     private String nome;
+    @NotNull
+    @Column(length = 100)
     private Endereco endereco;
-   
+
     //<editor-fold defaultstate="collapsed" desc="construtores">
-    
-    public Campus(){
-        
+    public Campus() {
+
     }
-    public Campus(Campus c){
+
+    public Campus(Campus c) {
         this.setCodigo(c.getCodigo());
         this.setNome(c.getNome());
         this.setEndereco(new Endereco());
@@ -42,13 +55,11 @@ public class Campus {
         this.getEndereco().setBairro(c.getEndereco().getBairro());
         this.getEndereco().setCidade(c.getEndereco().getCidade());
         this.getEndereco().setEstado(c.getEndereco().getEstado());
-        
-    }
-    
-//</editor-fold>
-    
-//<editor-fold defaultstate="collapsed" desc="getters and setters">
 
+    }
+
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="getters and setters">
     public int getCodigo() {
         return codigo;
     }
@@ -73,10 +84,7 @@ public class Campus {
         this.endereco = endereco;
     }
 
-    
-    
 //</editor-fold>
-
     @Override
     public String toString() {
         return "Campus{" + "codigo=" + codigo + ", nome=" + nome + '}';
