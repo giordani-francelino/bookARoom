@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class Console {
 
     private Repositorio bd = new Repositorio();
-    private Relatorio relatorio = new Relatorio();
+    private GeradorRelatorio relatorio = new GeradorRelatorio();
     private Equipamento equipamento = new Equipamento();
     private Funcionario funcionario = new Funcionario();
     private SalaReuniao salaReuniao = new SalaReuniao();

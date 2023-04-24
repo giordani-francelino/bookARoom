@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
-public class Relatorio {
+public class GeradorRelatorio {
 
     private List<SalaReuniao> salaReuniaos = new ArrayList<SalaReuniao>();
     private List<Reserva> reservas = new ArrayList<Reserva>();
