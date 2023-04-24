@@ -35,10 +35,11 @@ public class Reserva implements Comparable<Reserva> {
     private String assunto;
     private SalaReuniao salaReuniao = new SalaReuniao();
     private Funcionario funcionario = new Funcionario();
+    private boolean aula;
 
     //<editor-fold defaultstate="collapsed" desc="construtores">
     public Reserva() {
-
+        aula = false;
     }
 
     public Reserva(Reserva r) {
@@ -48,6 +49,7 @@ public class Reserva implements Comparable<Reserva> {
         this.setAssunto(r.getAssunto());
         this.setSalaReuniao(new SalaReuniao(r.getSalaReuniao()));
         this.setFuncionario(new Funcionario(r.getFuncionario()));
+        this.setAula(r.isAula());
     }
 
 //</editor-fold>
@@ -98,6 +100,14 @@ public class Reserva implements Comparable<Reserva> {
 
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
+    }
+
+    public boolean isAula() {
+        return aula;
+    }
+
+    public void setAula(boolean aula) {
+        this.aula = aula;
     }
 
     //</editor-fold>

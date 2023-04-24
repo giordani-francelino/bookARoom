@@ -36,9 +36,9 @@ public class ItemEquipamento {
         
     }
     
-    public ItemEquipamento(ItemEquipamento re){
-        this.setReserva(new Reserva(re.getReserva()));
-        this.setEquipamento(new Equipamento(re.getEquipamento()));
+    public ItemEquipamento(ItemEquipamento ie) throws Exception {
+        this.setReserva(new Reserva(ie.getReserva()));
+        this.setEquipamento(new Equipamento(ie.getEquipamento()));
     }
 //</editor-fold>
     

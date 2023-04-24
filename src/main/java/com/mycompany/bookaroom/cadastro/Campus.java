@@ -25,7 +25,7 @@ public class Campus {
 
     private int codigo;
     private String nome;
-    private String endereco;
+    private Endereco endereco;
    
     //<editor-fold defaultstate="collapsed" desc="construtores">
     
@@ -35,7 +35,14 @@ public class Campus {
     public Campus(Campus c){
         this.setCodigo(c.getCodigo());
         this.setNome(c.getNome());
-        this.setEndereco(c.getEndereco());
+        this.setEndereco(new Endereco());
+        this.getEndereco().setCodigo(c.getEndereco().getCodigo());
+        this.getEndereco().setLogradouro(c.getEndereco().getLogradouro());
+        this.getEndereco().setNumero(c.getEndereco().getNumero());
+        this.getEndereco().setBairro(c.getEndereco().getBairro());
+        this.getEndereco().setCidade(c.getEndereco().getCidade());
+        this.getEndereco().setEstado(c.getEndereco().getEstado());
+        
     }
     
 //</editor-fold>
@@ -58,13 +65,16 @@ public class Campus {
         this.nome = nome;
     }
 
-    public String getEndereco() {
+    public Endereco getEndereco() {
         return endereco;
     }
 
-    public void setEndereco(String endereco) {
+    public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
     }
+
+    
+    
 //</editor-fold>
 
     @Override

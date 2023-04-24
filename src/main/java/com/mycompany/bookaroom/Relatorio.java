@@ -39,7 +39,7 @@ public class Relatorio {
     private List<ItemEquipamento> itemEquipamentos = new ArrayList<ItemEquipamento>();
 
     public List<Reserva> reservasAtivas(Campus campus) {
-        reservas = BancoDeDados.listaReserva(campus.getCodigo());
+        reservas = Repositorio.listaReserva(campus.getCodigo());
         Collections.sort(reservas);
         List<Reserva> r = new ArrayList<Reserva>();
         for (Reserva c : reservas) {
@@ -56,7 +56,7 @@ public class Relatorio {
     }
 
     public void reservasInativas(Campus campus) {
-        reservas = BancoDeDados.listaReserva(campus.getCodigo());
+        reservas = Repositorio.listaReserva(campus.getCodigo());
         Collections.sort(reservas);
         List<Reserva> r = new ArrayList<Reserva>();
         for (Reserva c : reservas) {
@@ -75,16 +75,16 @@ public class Relatorio {
     }
 
     public List<Reserva> salasOcupadas(Campus campus) {
-        salaReuniaos = BancoDeDados.listaSalaReuniao(campus.getCodigo());
+        salaReuniaos = Repositorio.listaSalaReuniao(campus.getCodigo());
         Collections.sort(salaReuniaos);
-        reservas = BancoDeDados.listaReserva(campus.getCodigo());
+        reservas = Repositorio.listaReserva(campus.getCodigo());
         Collections.sort(reservas);
 
         return reservas;
     }
 
     public void salasLivres(Campus campus) {
-        salaReuniaos = BancoDeDados.listaSalaReuniao(campus.getCodigo());
+        salaReuniaos = Repositorio.listaSalaReuniao(campus.getCodigo());
         Collections.sort(salaReuniaos);
         reservas = new ArrayList<Reserva>();
         reservas = reservasAtivas(campus);

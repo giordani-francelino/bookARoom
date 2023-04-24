@@ -17,7 +17,6 @@
  */
 package com.mycompany.bookaroom.cadastro;
 
-import com.mycompany.bookaroom.cadastro.Campus;
 import java.util.Objects;
 
 /**
@@ -28,22 +27,32 @@ public class Equipamento {
 
     private int codigo;
     private Campus campus = new Campus();
+    private int tipo;
+    private String[] tipos;
     private String nome;
     private int patrimonio;
-    
+
     //<editor-fold defaultstate="collapsed" desc="construtores">
-    
-    public Equipamento(){
-        
+    public Equipamento() {
+        tipos = new String[7];
+        tipos[0] = "apontador a laser e passador de slides";
+        tipos[1] = "áudio e vídeo";
+        tipos[2] = "caixa de som";
+        tipos[3] = "controle de ar condicionado";
+        tipos[4] = "impressora 3D";
+        tipos[5] = "mesa";
+        tipos[6] = "notebook";
     }
-    public Equipamento(Equipamento e){
+
+    public Equipamento(Equipamento e) throws Exception {
+        this();
         this.setCodigo(e.getCodigo());
         this.setCampus(new Campus(e.getCampus()));
-        this.setNome(e.getNome());
+        this.setTipo(e.getTipo());
         this.setPatrimonio(e.getPatrimonio());
     }
 //</editor-fold>
-    
+
 //<editor-fold defaultstate="collapsed" desc="getters and setters">
     public int getCodigo() {
         return codigo;
@@ -61,12 +70,28 @@ public class Equipamento {
         this.campus = campus;
     }
 
-    public String getNome() {
-        return nome;
+    public int getTipo() {
+        return tipo;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setTipo(int tipo) throws Exception {
+        this.tipo = tipo;
+        for (int t = 0; t < tipos.length; t++) {
+            if (t == tipo) {
+                this.nome = tipos[t];
+            }
+        }
+        if (tipo < 0 || tipo >= tipos.length) {
+            throw new Exception("Tipo inválido.");
+        }
+    }
+
+    public String[] getTipos() {
+        return tipos;
+    }
+
+    public String getNome() {
+        return nome;
     }
 
     public int getPatrimonio() {
@@ -78,7 +103,6 @@ public class Equipamento {
     }
 
 //</editor-fold>
-
     @Override
     public int hashCode() {
         int hash = 3;
@@ -105,6 +129,5 @@ public class Equipamento {
 //        return Objects.equals(this.campus, other.campus);
         return hashCode() == obj.hashCode();
     }
-
 
 }

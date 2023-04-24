@@ -24,6 +24,8 @@ import com.mycompany.bookaroom.cadastro.Funcionario;
 import com.mycompany.bookaroom.cadastro.SalaReuniao;
 import com.mycompany.bookaroom.cadastro.Predio;
 import com.mycompany.bookaroom.cadastro.Campus;
+import com.mycompany.bookaroom.cadastro.Endereco;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -33,20 +35,24 @@ import java.util.Iterator;
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
-public class BancoDeDados {
+public class Repositorio {
 
-    public BancoDeDados() {
+    public Repositorio() {
         if (primeiroObjeto) {
             return;
         }
         for (int codigoCampus = 1; codigoCampus < 4; codigoCampus++) {
             int item = 1;
             Campus campus = new Campus();
+            Endereco endereco = new Endereco();
             campus.setCodigo(codigoCampus);
             campus.setNome("Campus " + codigoCampus);
-            campus.setEndereco("Endereco " + codigoCampus);
+            endereco.setCodigo(codigoCampus);
+            campus.setEndereco(endereco);
+            endereco.setCampus(campus);
+//            campus.setEndereco("Endereco " + codigoCampus);
             try {
-                BancoDeDados.gravaCampus(campus);
+                Repositorio.gravaCampus(campus);
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
@@ -56,7 +62,7 @@ public class BancoDeDados {
                 predio.setCampus(campus);
                 predio.setNome("Prédio" + codigoPredio + " - Campus " + codigoCampus);
                 try {
-                    BancoDeDados.gravaPredio(predio);
+                    Repositorio.gravaPredio(predio);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
 
@@ -68,7 +74,7 @@ public class BancoDeDados {
                     salaReuniao.setPredio(predio);
                     salaReuniao.setNumLugares(20 + codigoSalaReuniao + codigoPredio + codigoCampus);
                     try {
-                        BancoDeDados.gravaSalaReuniao(salaReuniao);
+                        Repositorio.gravaSalaReuniao(salaReuniao);
                     } catch (Exception ex) {
                         System.out.println(ex.getMessage());
                     }
@@ -78,9 +84,13 @@ public class BancoDeDados {
                     reserva.setHoraInicio(LocalTime.parse("11:00"));
                     reserva.setHoraFim(LocalTime.parse("12:00"));
                     reserva.setSalaReuniao(salaReuniao);
+                    reserva.setFuncionario(new Funcionario());
+                    reserva.getFuncionario().setCodigo(codigoPredio);
+                    reserva.getFuncionario().setCampus(campus);
+                    
                     reserva.setAssunto("Teste " + codigoSalaReuniao);
                     try {
-                        BancoDeDados.gravaReserva(reserva);
+                        Repositorio.gravaReserva(reserva);
                     } catch (Exception ex) {
                         System.out.println(ex.getMessage());
                     }
@@ -89,10 +99,9 @@ public class BancoDeDados {
                     itemEquipamento.setReserva(reserva);
                     itemEquipamento.getEquipamento().setCodigo(item);
                     itemEquipamento.getEquipamento().setCampus(campus);
-                    itemEquipamento.getEquipamento().setNome("Equipamento " + item + " - Campus " + codigoCampus);
                     item++;
                     try {
-                        BancoDeDados.gravaReservaEquipamento(itemEquipamento);
+                        Repositorio.gravaItemEquipamento(itemEquipamento);
                     } catch (Exception ex) {
                         System.out.println(ex.getMessage());
                     }
@@ -103,10 +112,10 @@ public class BancoDeDados {
             for (int codigoFuncionario = 1; codigoFuncionario < 11; codigoFuncionario++) {
                 Funcionario funcionario = new Funcionario();
                 funcionario.setCodigo(codigoFuncionario);
-                funcionario.getCampus().setCodigo(codigoCampus);
+                funcionario.setCampus(campus);
                 funcionario.setNome("Funcioánrio " + codigoFuncionario + " - Campus " + codigoCampus);
                 try {
-                    BancoDeDados.gravaFuncionario(funcionario);
+                    Repositorio.gravaFuncionario(funcionario);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -116,9 +125,9 @@ public class BancoDeDados {
                 Equipamento equipamento = new Equipamento();
                 equipamento.setCodigo(codigoEquipamento);
                 equipamento.getCampus().setCodigo(codigoCampus);
-                equipamento.setNome("Equipamento " + codigoEquipamento + " - Campus " + codigoCampus);
+//                equipamento.setNome("Equipamento " + codigoEquipamento + " - Campus " + codigoCampus);
                 try {
-                    BancoDeDados.gravaEquipamento(equipamento);
+                    Repositorio.gravaEquipamento(equipamento);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -134,6 +143,7 @@ public class BancoDeDados {
     private static ArrayList<SalaReuniao> salaReuniaos = new ArrayList<SalaReuniao>();
     private static ArrayList<Funcionario> funcionarios = new ArrayList<Funcionario>();
     private static ArrayList<Equipamento> equipamentos = new ArrayList<Equipamento>();
+    private static ArrayList<Endereco> enderecos = new ArrayList<Endereco>();
     private static ArrayList<Reserva> reservas = new ArrayList<Reserva>();
     private static ArrayList<ItemEquipamento> itemEquipamentos=new ArrayList<ItemEquipamento>();
 
@@ -467,7 +477,7 @@ public class BancoDeDados {
 
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="crud itemEquipamento">
-    public static boolean consultaReservaEquipamento(ItemEquipamento itemEquipamento) {
+    public static boolean consultaItemEquipamento(ItemEquipamento itemEquipamento) {
         for (Iterator<ItemEquipamento> iterator = itemEquipamentos.iterator(); iterator.hasNext();) {
             ItemEquipamento c = iterator.next();
             if (itemEquipamento.equals(c)) {
@@ -477,8 +487,8 @@ public class BancoDeDados {
         return false;
     }
 
-    public static boolean gravaReservaEquipamento(ItemEquipamento itemEquipamento) throws Exception {
-        if (consultaReservaEquipamento(itemEquipamento)) {
+    public static boolean gravaItemEquipamento(ItemEquipamento itemEquipamento) throws Exception {
+        if (consultaItemEquipamento(itemEquipamento)) {
             throw new Exception("Equipamento já reservado para essa data/horário.");
         }
         ItemEquipamento re = new ItemEquipamento(itemEquipamento);
@@ -486,8 +496,8 @@ public class BancoDeDados {
         return true;
     }
 
-    public static boolean excluiReservaEquipamento(ItemEquipamento itemEquipamento) throws Exception {
-        if (!consultaReservaEquipamento(itemEquipamento)) {
+    public static boolean excluiItemEquipamento(ItemEquipamento itemEquipamento) throws Exception {
+        if (!consultaItemEquipamento(itemEquipamento)) {
  
             throw new Exception("Equipamento não reservado para essa data/horário.");
         }
@@ -501,7 +511,7 @@ public class BancoDeDados {
         return true;
     }
 
-    public static ItemEquipamento recuperaReservaEquipamento(int codigo, int codigoSalaReuniao, int codigoPredio,
+    public static ItemEquipamento recuperaItemEquipamento(int codigo, int codigoSalaReuniao, int codigoPredio,
             int codigoCampus, LocalDate dataReserva, LocalTime horaInicio, LocalTime horaFim) throws Exception {
         for (Iterator<ItemEquipamento> iterator = itemEquipamentos.iterator(); iterator.hasNext();) {
             ItemEquipamento c = iterator.next();
@@ -515,10 +525,10 @@ public class BancoDeDados {
                 return c;
             }
         }
-        throw new Exception("ReservaEquipamento não efetuada para essa data e hora.");
+        throw new Exception("ItemEquipamento não efetuada para essa data e hora.");
     }
 
-    public static ArrayList<ItemEquipamento> listaReservaEquipamento(int codigoCampus) {
+    public static ArrayList<ItemEquipamento> listaItemEquipamento(int codigoCampus) {
 
         ArrayList<ItemEquipamento> p = new ArrayList<ItemEquipamento>();
         for (ItemEquipamento c : itemEquipamentos) {

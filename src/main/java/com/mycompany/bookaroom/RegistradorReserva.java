@@ -19,7 +19,9 @@ package com.mycompany.bookaroom;
 
 import com.mycompany.bookaroom.negocio.ItemEquipamento;
 import com.mycompany.bookaroom.negocio.Reserva;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -27,8 +29,8 @@ import java.util.ArrayList;
  */
 public class RegistradorReserva {
 
-    private Reserva reserva = new Reserva();
-    private ItemEquipamento itemEquipamento = new ItemEquipamento();
+    private Reserva reserva;
+    private ItemEquipamento itemEquipamento;
 
 //<editor-fold defaultstate="collapsed" desc="geters and setters">
     public Reserva getReserva() {
@@ -37,20 +39,20 @@ public class RegistradorReserva {
     }
 
     public void setReserva(Reserva reserva) {
-        this.reserva = reserva;
+        this.reserva = new Reserva(reserva);
     }
 
-    public ItemEquipamento getReservaEquipamento() {
+    public ItemEquipamento getItemEquipamento() {
         return itemEquipamento;
     }
 
-    public void setReservaEquipamento(ItemEquipamento itemEquipamento) {
-        this.itemEquipamento = itemEquipamento;
+    public void setItemEquipamento(ItemEquipamento itemEquipamento) throws Exception {
+        this.itemEquipamento = new ItemEquipamento(itemEquipamento);
     }
 
 //</editor-fold>
     public boolean gerarReserva() throws Exception {
-        if (!BancoDeDados.consultaSalaReuniao(reserva.getSalaReuniao())) {
+        if (!Repositorio.consultaSalaReuniao(reserva.getSalaReuniao())) {
             throw new Exception("Sala não cadastrada.");
         }
 
@@ -58,8 +60,10 @@ public class RegistradorReserva {
 //data2.compareTo(date1); //data2 > data1, retorna um valor maior que 0
 //data1.compareTo(date3); //data1 = data3, então um 0 será mostrado no console
         ArrayList<Reserva> reservas
-                = BancoDeDados.listaReserva(reserva.getSalaReuniao().getPredio().getCampus().getCodigo());
-        for (Reserva c : reservas) {
+                = Repositorio.listaReserva(reserva.getSalaReuniao().getPredio().getCampus().getCodigo());
+
+        for (Iterator<Reserva> iterator = reservas.iterator(); iterator.hasNext();) {
+            Reserva c = iterator.next();
             if (c.getSalaReuniao().getCodigo() == reserva.getSalaReuniao().getCodigo()
                     && c.getSalaReuniao().getPredio().getCodigo()
                     == reserva.getSalaReuniao().getPredio().getCodigo()
@@ -70,39 +74,47 @@ public class RegistradorReserva {
                             && reserva.getHoraInicio().compareTo(c.getHoraFim()) <= 0)
                             || (reserva.getHoraFim().compareTo(c.getHoraInicio()) >= 0
                             && reserva.getHoraFim().compareTo(c.getHoraFim()) <= 0)) {
-                        throw new Exception("Sala já reserva nesse horário");
+                        if (reserva.isAula() == true) {
+                            iterator.remove();
+                        } else {
+                            throw new Exception("Sala já reserva nesse horário");
+                        }
                     }
                 }
             }
         }
-        BancoDeDados.gravaReserva(reserva);
-        System.out.print("Reserva gravada com sucesso.\n");
+        Repositorio.gravaReserva(reserva);
+        if (reserva.isAula() == false) {
+            System.out.print("Reserva gravada com sucesso.\n");
+        }
         return true;
+
     }
 
     public boolean cancelarReserva() throws Exception {
-//ArrayList<ReservaEquipamento> listaReservaEquipamento(int codigoCampus)
+//ArrayList<ItemEquipamento> listaItemEquipamento(int codigoCampus)
         ArrayList<ItemEquipamento> itemEquipamentos
-                = BancoDeDados.listaReservaEquipamento(reserva.getSalaReuniao().getPredio().getCampus().getCodigo());
+                = Repositorio.listaItemEquipamento(reserva.getSalaReuniao().getPredio().getCampus().getCodigo());
         for (ItemEquipamento c : itemEquipamentos) {
             if (c.getReserva() == reserva) {
-                BancoDeDados.excluiReservaEquipamento(c);
+                Repositorio.excluiItemEquipamento(c);
+
             }
         }
-        BancoDeDados.excluiReserva(reserva);
+        Repositorio.excluiReserva(reserva);
         System.out.println("Reserva cancelada com sucesso\n");
         return true;
     }
 
-    public boolean gerarReservaEquipamento() throws Exception {
-        if (!BancoDeDados.consultaEquipamento(itemEquipamento.getEquipamento())) {
+    public boolean gerarItemEquipamento() throws Exception {
+        if (!Repositorio.consultaEquipamento(itemEquipamento.getEquipamento())) {
             throw new Exception("Equipamento não cadastrado.");
         }
-        if (!BancoDeDados.consultaReserva(itemEquipamento.getReserva())) {
+        if (!Repositorio.consultaReserva(itemEquipamento.getReserva())) {
             throw new Exception("Reserva não cadastrada.");
         }
         ArrayList<ItemEquipamento> itemEquipamentos
-                = BancoDeDados.listaReservaEquipamento(reserva.getSalaReuniao().getPredio().getCampus().getCodigo());
+                = Repositorio.listaItemEquipamento(reserva.getSalaReuniao().getPredio().getCampus().getCodigo());
         for (ItemEquipamento c : itemEquipamentos) {
             if (c.getReserva().getDataReserva().compareTo(itemEquipamento.getReserva().getDataReserva()) == 0) {
                 if ((itemEquipamento.getReserva().getHoraInicio().compareTo(c.getReserva().getHoraInicio()) >= 0
@@ -114,14 +126,27 @@ public class RegistradorReserva {
                 }
             }
         }
-        BancoDeDados.gravaReservaEquipamento(itemEquipamento);
+        Repositorio.gravaItemEquipamento(itemEquipamento);
         System.out.println("Equipamento reservado com sucesso");
         return true;
     }
 
-    public boolean cancelarReservaEquipamento() throws Exception {
-        BancoDeDados.excluiReservaEquipamento(itemEquipamento);
+    public boolean cancelarItemEquipamento() throws Exception {
+        Repositorio.excluiItemEquipamento(itemEquipamento);
         System.out.println("Reserva de equipamento cancelada com sucesso.");
+
+        return true;
+    }
+
+    public boolean gerarReservaAula(LocalDate dataFimSemestre, int diaSemana) throws Exception {
+
+        while (reserva.getDataReserva().getDayOfWeek().getValue() != diaSemana) {
+            reserva.setDataReserva(reserva.getDataReserva().plusDays(1));
+        }
+        while (reserva.getDataReserva().compareTo(dataFimSemestre) <= 0) {
+            gerarReserva();
+            reserva.setDataReserva(reserva.getDataReserva().plusDays(7));
+        }
 
         return true;
     }

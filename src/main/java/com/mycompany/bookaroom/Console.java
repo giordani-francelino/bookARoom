@@ -1,4 +1,3 @@
-
 package com.mycompany.bookaroom;
 
 import com.mycompany.bookaroom.negocio.ItemEquipamento;
@@ -17,7 +16,7 @@ import java.util.Scanner;
  */
 public class Console {
 
-    private BancoDeDados bd = new BancoDeDados();
+    private Repositorio bd = new Repositorio();
     private Relatorio relatorio = new Relatorio();
     private Equipamento equipamento = new Equipamento();
     private Funcionario funcionario = new Funcionario();
@@ -32,12 +31,16 @@ public class Console {
     private LocalTime horaFim = LocalTime.now();
     private Campus campus = new Campus();
     private int codigoEquipamento = 0;
+    private boolean aula;
+    private int diaSemana;
+    private LocalDate dataFimSemestre;
     private Scanner sc = new Scanner(System.in);
 
-    public void abreMenu() {
+    public Console() {
 
-        funcionario.setCodigo(1);
-        campus.setCodigo(1);
+    }
+
+    public void abreMenu() {
 
         String s;
 //        Scanner sc = new Scanner(System.in);
@@ -50,16 +53,15 @@ public class Console {
 //        System.out.print("Digite o codigo do Funcionário:\n");
 //        s = sc.next();
 //        funcionario.setCodigo(Integer.parseInt(s));
-        funcionario.getCampus().setCodigo(campus.getCodigo());
         try {
-            funcionario = BancoDeDados.recuperaFuncionario(funcionario.getCodigo(), campus.getCodigo());
+            campus = Repositorio.recuperaCampus(1);
+            funcionario = Repositorio.recuperaFuncionario(1, 1);
         } catch (Exception ex) {
-            System.out.println("Funcionário não cadstrado.");
+            System.out.println(ex.getMessage());
             return;
         }
-        System.out.println(funcionario.getNome());
 
-//        if (!BancoDeDados.consultaFuncionario(f)) {
+//        if (!Repositorio.consultaFuncionario(f)) {
 //            System.out.println("Funcionário não cadstrado.");
 //            return;
 //        }
@@ -78,13 +80,14 @@ public class Console {
                 break;
             } else if (Integer.parseInt(s) == 1) {
 // efetuar reserva
+                aula = false;
                 obterDadosReserva();
                 String assunto = "";
                 System.out.print("Digite o assunto da reserva:\n");
                 Scanner as = new Scanner(System.in);
                 assunto = as.nextLine();
-                System.out.println(assunto);
                 reserva.setAssunto(assunto);
+                reserva.setAula(aula);
                 try {
                     registradorReserva.setReserva(reserva);
                     registradorReserva.gerarReserva();
@@ -120,6 +123,20 @@ public class Console {
             } else if (Integer.parseInt(s) == 7) {
 // reservas inativas
                 relatorio.reservasInativas(campus);
+            } else if (Integer.parseInt(s) == 8) {
+// cadastrar equipamento
+            } else if (Integer.parseInt(s) == 9) {
+// cadastrar aula
+                aula = true;
+                obterDadosReserva();
+                reserva.setAula(aula);
+                reserva.setAssunto("Aula");
+                try {
+                    registradorReserva.setReserva(reserva);
+                    registradorReserva.gerarReservaAula(dataFimSemestre, diaSemana);
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
             } else {
                 System.out.println("Opção inválida");
             }
@@ -142,6 +159,8 @@ public class Console {
         System.out.print("5 - Salas ocupadas\n");
         System.out.print("6 - Reservas ativas\n");
         System.out.print("7 - Reservas inativas\n");
+        System.out.print("8 - Cadastrar equipamentos\n");
+        System.out.print("9 - Cadastrar aulas\n");
         System.out.print("0 - Sair\n");
 
     }
@@ -159,24 +178,118 @@ public class Console {
 
         salaReuniao = new SalaReuniao();
 //        reserva = new Reserva();
-        System.out.print("Digite o predio:\n");
-        s = sc.next();
-        codigoPredio = Integer.parseInt(s);
-        System.out.print("Digite a sala:\n");
-        s = sc.next();
-        codigoSalaReuniao = Integer.parseInt(s);
-        System.out.print("Digite a data da reserva no formato 'aaaa-mm-dd':\n");
-        s = sc.next();
-        dataReserva = LocalDate.parse(s);
+        System.out.print("Digite um numero maior que zero para o predio:\n");
+        while (sc.hasNext()) {
+            s = sc.next();
+            try {
+                codigoPredio = Integer.parseInt(s);
+                if (codigoPredio > 0) {
+                    break;
+                }
+            } catch (Exception ex) {
+            }
+            System.out.print("Valor digitado inválido\n");
+            System.out.print("Digite um numero maior que zero para o predio:\n");
+        }
+        System.out.print("Digite um numero maior que zero para a sala:\n");
+        while (sc.hasNext()) {
+            s = sc.next();
+            try {
+                codigoSalaReuniao = Integer.parseInt(s);
+                if (codigoSalaReuniao > 0) {
+                    break;
+                }
+            } catch (Exception ex) {
+            }
+            System.out.print("Valor digitado inválido\n");
+            System.out.print("Digite um numero maior que zero para a sala:\n");
+        }
+        if (aula == false) {
+            System.out.print("Digite a data da reserva no formato 'aaaa-mm-dd':\n");
+        } else {
+            System.out.print("Digite a data início do semestre no formato 'aaaa-mm-dd':\n");
+        }
+        while (sc.hasNext()) {
+            s = sc.next();
+            try {
+                dataReserva = LocalDate.parse(s);
+                if (dataReserva.compareTo(LocalDate.now()) >= 0) {
+                    break;
+                }
+                if (aula == true) {
+                    break;
+                }
+            } catch (Exception ex) {
+            }
+            System.out.print("Valor digitado inválido\n");
+            if (aula == false) {
+                System.out.print("Digite a data da reserva no formato 'aaaa-mm-dd':\n");
+            } else {
+                System.out.print("Digite a data início do semestre no formato 'aaaa-mm-dd':\n");
+            }
+        }
+        if (aula == true) {
+            System.out.print("Digite a data fim do semestre no formato 'aaaa-mm-dd':\n");
+            while (sc.hasNext()) {
+                s = sc.next();
+                try {
+                    dataFimSemestre = LocalDate.parse(s);
+                    if (dataFimSemestre.compareTo(dataReserva) > 0
+                            || dataFimSemestre.compareTo(dataReserva) == 0) {
+                        break;
+                    }
+                } catch (Exception ex) {
+                }
+                System.out.print("Valor digitado inválido\n");
+                System.out.print("Digite a data fim do semestre no formato 'aaaa-mm-dd':\n");
+            }
+            System.out.print("Digite o dia da semana da aula:\n");
+            System.out.print("1-segunda 2-terca 3-quarta 4-quinta 5-sexta 6-sábado:\n");
+            while (sc.hasNext()) {
+                s = sc.next();
+                try {
+                    diaSemana = Integer.parseInt(s);
+                    if (diaSemana > 0 && diaSemana < 7) {
+                        break;
+                    }
+                } catch (Exception ex) {
+                }
+                System.out.print("Valor digitado inválido\n");
+                System.out.print("Digite o dia da semana da aula:\n");
+                System.out.print("1-segunda 2-terca 3-quarta 4-quinta 5-sexta 6-sábado:\n");
+            }
+
+        }
+
         System.out.print("Digite a hora de início no formato 'hh:mm':\n");
-        s = sc.next();
-        horaInicio = LocalTime.parse(s);
+        while (sc.hasNext()) {
+            s = sc.next();
+            try {
+                horaInicio = LocalTime.parse(s);
+                break;
+            } catch (Exception ex) {
+            }
+            System.out.print("Valor digitado inválido\n");
+            System.out.print("Digite a hora de início no formato 'hh:mm':\n");
+        }
         System.out.print("Digite a hora final no formato 'hh:mm':\n");
-        s = sc.next();
-        horaFim = LocalTime.parse(s);
+        while (sc.hasNext()) {
+            s = sc.next();
+            try {
+                horaFim = LocalTime.parse(s);
+                if (horaFim.compareTo(horaInicio) > 0) {
+                    break;
+                }
+            } catch (Exception ex) {
+            }
+            System.out.print("Valor digitado inválido\n");
+            System.out.print("Digite a hora final no formato 'hh:mm':\n");
+        }
         salaReuniao.setCodigo(codigoSalaReuniao);
         salaReuniao.getPredio().setCodigo(codigoPredio);
-        salaReuniao.getPredio().getCampus().setCodigo(campus.getCodigo());
+        salaReuniao.getPredio().setCampus(campus);
+//        salaReuniao.getPredio().getCampus().setCodigo(campus.getCodigo());
+
         reserva.setSalaReuniao(salaReuniao);
         reserva.setDataReserva(dataReserva);
         reserva.setHoraInicio(horaInicio);
@@ -186,7 +299,7 @@ public class Console {
 
     public void registarEquipamentos() {
         String s;
-        if (!BancoDeDados.consultaReserva(reserva)) {
+        if (!Repositorio.consultaReserva(reserva)) {
             System.out.println("Reserva não cadastrada.");
             return;
         }
@@ -202,7 +315,7 @@ public class Console {
             if (Integer.parseInt(s) == 1) {
                 try {
                     obterDadosEquipamento();
-                    registradorReserva.gerarReservaEquipamento();
+                    registradorReserva.gerarItemEquipamento();
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -210,7 +323,7 @@ public class Console {
             } else if (Integer.parseInt(s) == 2) {
                 try {
                     obterDadosEquipamento();
-                    registradorReserva.cancelarReservaEquipamento();
+                    registradorReserva.cancelarItemEquipamento();
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -232,7 +345,11 @@ public class Console {
         equipamento.getCampus().setCodigo(campus.getCodigo());
         itemEquipamento.setEquipamento(equipamento);
         itemEquipamento.setReserva(reserva);
-        registradorReserva.setReservaEquipamento(itemEquipamento);
+        try {
+            registradorReserva.setItemEquipamento(itemEquipamento);
+        } catch (Exception ex) {
+            System.out.print(ex.getMessage());
+        }
     }
 
 }
