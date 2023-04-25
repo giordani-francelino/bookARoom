@@ -18,6 +18,8 @@
 package com.mycompany.bookaroom.cadastro;
 
 import com.mycompany.bookaroom.cadastro.Campus;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -27,15 +29,18 @@ import java.util.Objects;
 public class Predio {
 
     private int codigo;
-    private Campus campus = new Campus();
+    private Campus campus;
     private String nome;
+    private List<SalaReuniao> salaReuniaos;
 
     //<editor-fold defaultstate="collapsed" desc="construtores">
     public Predio() {
-
+        campus = new Campus();
+        salaReuniaos = new ArrayList();
     }
 
     public Predio(Predio p) {
+        this();
         this.setCodigo(p.getCodigo());
         this.setCampus(new Campus(p.getCampus()));
         this.setNome(p.getNome());
@@ -67,6 +72,16 @@ public class Predio {
         this.nome = nome;
     }
 
+    public List<SalaReuniao> getSalaReuniaos() {
+        return salaReuniaos;
+    }
+
+    public void setSalaReuniaos(List<SalaReuniao> salaReuniaos) {
+        this.salaReuniaos = salaReuniaos;
+    }
+
+    
+    
 //</editor-fold>
     @Override
     public String toString() {

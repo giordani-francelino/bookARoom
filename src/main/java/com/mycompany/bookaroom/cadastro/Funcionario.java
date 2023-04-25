@@ -27,15 +27,16 @@ import java.util.Objects;
 public class Funcionario {
 
     private int codigo;
-    private Campus campus = new Campus();
+    private Campus campus;
     private String nome;
     
 //<editor-fold defaultstate="collapsed" desc="construtores">
     
     public Funcionario(){
-        
+        this.campus = new Campus();
     }
     public Funcionario(Funcionario f){
+        this();
         this.setCodigo(f.getCodigo());
         this.setCampus(new Campus(f.getCampus()));
         this.setNome(f.getNome());

@@ -21,6 +21,8 @@ import com.mycompany.bookaroom.cadastro.Funcionario;
 import com.mycompany.bookaroom.cadastro.SalaReuniao;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -33,13 +35,16 @@ public class Reserva implements Comparable<Reserva> {
     private LocalTime horaInicio;
     private LocalTime horaFim;
     private String assunto;
-    private SalaReuniao salaReuniao = new SalaReuniao();
-    private Funcionario funcionario = new Funcionario();
+    private SalaReuniao salaReuniao;
+    private Funcionario funcionario;
     private boolean aula;
+    private List<ItemEquipamento>  itemEquipamentos;
 
     //<editor-fold defaultstate="collapsed" desc="construtores">
     public Reserva() {
-        aula = false;
+        salaReuniao = new SalaReuniao();
+        funcionario = new Funcionario();
+        itemEquipamentos = new ArrayList();
     }
 
     public Reserva(Reserva r) {
@@ -110,6 +115,16 @@ public class Reserva implements Comparable<Reserva> {
         this.aula = aula;
     }
 
+    public List<ItemEquipamento> getItemEquipamentos() {
+        return itemEquipamentos;
+    }
+
+    public void setItemEquipamentos(List<ItemEquipamento> itemEquipamentos) {
+        this.itemEquipamentos = itemEquipamentos;
+    }
+
+    
+    
     //</editor-fold>
     @Override
     public String toString() {
@@ -117,7 +132,8 @@ public class Reserva implements Comparable<Reserva> {
                 + ", Hora fim=" + horaFim + ", Sala=" + this.getSalaReuniao().getCodigo()
                 + ", Predio=" + this.getSalaReuniao().getPredio().getCodigo()
                 + ", Campus=" + this.getSalaReuniao().getPredio().getCampus().getCodigo()
-                + ", Assunto=" + assunto + ", " + funcionario + '}';
+                + ", Assunto=" + assunto + ", " + funcionario + "}\n"
+                + "{" + itemEquipamentos + "}";
     }
 
     @Override

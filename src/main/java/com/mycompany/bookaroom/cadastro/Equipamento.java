@@ -26,7 +26,7 @@ import java.util.Objects;
 public class Equipamento {
 
     private int codigo;
-    private Campus campus = new Campus();
+    private Campus campus;
     private int tipo;
     private String[] tipos;
     private String nome;
@@ -34,6 +34,7 @@ public class Equipamento {
 
     //<editor-fold defaultstate="collapsed" desc="construtores">
     public Equipamento() {
+        campus = new Campus();
         tipos = new String[7];
         tipos[0] = "apontador a laser e passador de slides";
         tipos[1] = "áudio e vídeo";
@@ -129,5 +130,12 @@ public class Equipamento {
 //        return Objects.equals(this.campus, other.campus);
         return hashCode() == obj.hashCode();
     }
+    @Override
+    public String toString() {
+        return "Equipamento{" + "codigo=" + codigo + ", campus=" + campus + ", nome=" + nome 
+                +", tipo = " + tipos[tipo] + "}\n";
+    }
 
+    
+    
 }

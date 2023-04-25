@@ -27,16 +27,18 @@ import java.util.Objects;
  */
 public class ItemEquipamento {
 
-    private Reserva reserva = new Reserva();
-    private Equipamento equipamento = new Equipamento();
+    private Reserva reserva;
+    private Equipamento equipamento;
     
 //<editor-fold defaultstate="collapsed" desc="construtores">
     
     public ItemEquipamento(){
-        
+        reserva = new Reserva();
+        equipamento = new Equipamento();
     }
     
     public ItemEquipamento(ItemEquipamento ie) throws Exception {
+        this();
         this.setReserva(new Reserva(ie.getReserva()));
         this.setEquipamento(new Equipamento(ie.getEquipamento()));
     }
@@ -75,6 +77,13 @@ public class ItemEquipamento {
         return hash;
     }
 
+    @Override
+    public String toString() {
+        return "ItemEquipamento{" + "reserva=" + reserva + ", equipamento=" + equipamento + '}';
+    }
+
+    
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

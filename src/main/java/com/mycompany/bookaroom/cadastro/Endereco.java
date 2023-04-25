@@ -1,26 +1,65 @@
 package com.mycompany.bookaroom.cadastro;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.PrimaryKeyJoinColumns;
+import jakarta.validation.constraints.NotNull;
+
 /**
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
 public class Endereco {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int codigo;
+
+    @NotNull
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "campus_codigo")
     private Campus campus;
+
+    @NotNull
+    @Column(length = 100)
     private String logradouro;
+
     private int numero;
+
+    @NotNull
+    @Column(length = 100)
     private String bairro;
+
     private long cep;
+
+    @NotNull
+    @Column(length = 100)
     private String cidade;
+
+    @NotNull
+    @Column(length = 2)
     private String estado;
 
 //<editor-fold defaultstate="collapsed" desc="construtores">
     public Endereco() {
-
+        if (campus == null) {
+            campus = new Campus(this);
+        }
     }
+    
+    public Endereco(Campus campus){
+        
+    }
+    
 
     public Endereco(Endereco e) {
+        this();
         this.setCodigo(e.getCodigo());
 //        this.setCampus(new Campus(e.getCampus()));
         this.setCampus(new Campus());

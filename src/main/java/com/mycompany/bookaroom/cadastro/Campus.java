@@ -17,11 +17,19 @@
  */
 package com.mycompany.bookaroom.cadastro;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -32,20 +40,46 @@ import jakarta.validation.constraints.NotNull;
 public class Campus {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int codigo;
+
     @NotNull
     @Column(length = 100)
     private String nome;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "campus_codigo")
+    private List<Predio> predios;
+
+    @OneToMany(mappedBy = "campus", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "campus_codigo")
+    private List<Equipamento> equipamentos;
+
+    @OneToMany(mappedBy = "campus", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "campus_codigo")
+    private List<Funcionario> funcionarios;
+
     @NotNull
-    @Column(length = 100)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "endreco_codigo")
     private Endereco endereco;
 
     //<editor-fold defaultstate="collapsed" desc="construtores">
     public Campus() {
+        predios = new ArrayList<>();
+        equipamentos = new ArrayList<>();
+        funcionarios = new ArrayList<>();
+        if (endereco == null) {
+            endereco = new Endereco(this);
+        }
+    }
+
+    public Campus(Endereco endereco) {
 
     }
 
     public Campus(Campus c) {
+        this();
         this.setCodigo(c.getCodigo());
         this.setNome(c.getNome());
         this.setEndereco(new Endereco());
@@ -82,6 +116,30 @@ public class Campus {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    public List<Predio> getPredios() {
+        return predios;
+    }
+
+    public void setPredios(List<Predio> predios) {
+        this.predios = predios;
+    }
+
+    public List<Equipamento> getEquipamentos() {
+        return equipamentos;
+    }
+
+    public void setEquipamentos(List<Equipamento> equipamentos) {
+        this.equipamentos = equipamentos;
+    }
+
+    public List<Funcionario> getFuncionarios() {
+        return funcionarios;
+    }
+
+    public void setFuncionarios(List<Funcionario> funcionarios) {
+        this.funcionarios = funcionarios;
     }
 
 //</editor-fold>

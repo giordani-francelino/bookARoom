@@ -18,10 +18,12 @@
 package com.mycompany.bookaroom.cadastro;
 
 import com.mycompany.bookaroom.cadastro.Predio;
+import com.mycompany.bookaroom.negocio.Reserva;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -31,17 +33,20 @@ import java.util.Objects;
 public class SalaReuniao implements Comparable<SalaReuniao> {
 
     private int codigo;
-    private Predio predio = new Predio();
+    private Predio predio;
     private int numLugares;
+    private List<Reserva> reservas;
 
     //<editor-fold defaultstate="collapsed" desc="Construtores">
     public SalaReuniao() {
-
+        predio = new Predio();
+        reservas = new ArrayList();
     }
 
     public SalaReuniao(SalaReuniao sr) {
+        this();
         this.setCodigo(sr.getCodigo());
-        this.setPredio(new Predio( sr.getPredio()));
+        this.setPredio(new Predio(sr.getPredio()));
         this.setNumLugares(sr.getNumLugares());
     }
 
@@ -70,6 +75,17 @@ public class SalaReuniao implements Comparable<SalaReuniao> {
     public void setNumLugares(int numLugares) {
         this.numLugares = numLugares;
     }
+
+    public List<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(List<Reserva> reservas) {
+        this.reservas = reservas;
+    }
+    
+    
+    
 //</editor-fold>
 
     @Override
