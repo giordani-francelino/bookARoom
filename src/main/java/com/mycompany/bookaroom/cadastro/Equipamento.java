@@ -130,12 +130,10 @@ public class Equipamento {
 //        return Objects.equals(this.campus, other.campus);
         return hashCode() == obj.hashCode();
     }
+
     @Override
     public String toString() {
-        return "Equipamento{" + "codigo=" + codigo + ", campus=" + campus + ", nome=" + nome 
-                +", tipo = " + tipos[tipo] + "}\n";
+        return "Equipamento{" + "codigo=" + codigo + ", tipo = " + tipos[tipo] + "}";
     }
 
-    
-    
 }

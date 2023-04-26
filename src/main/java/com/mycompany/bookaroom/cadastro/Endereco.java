@@ -17,6 +17,8 @@ import jakarta.validation.constraints.NotNull;
  */
 public class Endereco {
 
+    
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int codigo;
@@ -46,6 +48,8 @@ public class Endereco {
     @Column(length = 2)
     private String estado;
 
+    
+    
 //<editor-fold defaultstate="collapsed" desc="construtores">
     public Endereco() {
         if (campus == null) {
@@ -54,7 +58,7 @@ public class Endereco {
     }
     
     public Endereco(Campus campus){
-        
+        this.campus = campus;
     }
     
 

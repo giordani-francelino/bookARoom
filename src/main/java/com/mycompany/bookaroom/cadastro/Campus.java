@@ -75,7 +75,10 @@ public class Campus {
     }
 
     public Campus(Endereco endereco) {
-
+        predios = new ArrayList<>();
+        equipamentos = new ArrayList<>();
+        funcionarios = new ArrayList<>();
+        this.endereco = endereco;
     }
 
     public Campus(Campus c) {

@@ -37,101 +37,86 @@ import java.util.Iterator;
  */
 public class Repositorio {
 
-    public Repositorio() {
+    public Repositorio() throws Exception {
         if (primeiroObjeto) {
             return;
         }
         for (int codigoCampus = 1; codigoCampus < 4; codigoCampus++) {
-            int item = 1;
             Campus campus = new Campus();
-            Endereco endereco = new Endereco();
             campus.setCodigo(codigoCampus);
             campus.setNome("Campus " + codigoCampus);
+            Endereco endereco = new Endereco();
             endereco.setCodigo(codigoCampus);
+            endereco.setLogradouro("Rua " + codigoCampus);
+            endereco.setNumero(codigoCampus);
+            endereco.setCep(37140000L + (long) codigoCampus);
+            endereco.setBairro("Bairro" + codigoCampus);
+            endereco.setCidade("Cidade" + codigoCampus);
+            endereco.setEstado("MG");
             campus.setEndereco(endereco);
             endereco.setCampus(campus);
-//            campus.setEndereco("Endereco " + codigoCampus);
-            try {
-                Repositorio.gravaCampus(campus);
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+
+            Repositorio.gravaCampus(campus);
+
+            for (int codigoEquipamento = 1; codigoEquipamento < 8; codigoEquipamento++) {
+                Equipamento equipamento = new Equipamento();
+                equipamento.setCodigo(codigoEquipamento);
+                equipamento.setTipo(codigoEquipamento - 1);
+                equipamento.setCampus(campus);
+
+                Repositorio.gravaEquipamento(equipamento);
+                campus.getEquipamentos().add(equipamento);
             }
+
             for (int codigoPredio = 1; codigoPredio < 4; codigoPredio++) {
                 Predio predio = new Predio();
                 predio.setCodigo(codigoPredio);
                 predio.setCampus(campus);
                 predio.setNome("Prédio" + codigoPredio + " - Campus " + codigoCampus);
-                try {
-                    Repositorio.gravaPredio(predio);
-                } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
 
-                }
+                Repositorio.gravaPredio(predio);
+                campus.getPredios().add(predio);
+
+                Funcionario funcionario = new Funcionario();
+                funcionario.setCodigo(codigoPredio);
+                funcionario.setCampus(campus);
+                funcionario.setNome("Funcionário " + codigoPredio + " - campus " + codigoCampus);
+
+                Repositorio.gravaFuncionario(funcionario);
+                campus.getFuncionarios().add(funcionario);
+
 //              inclui salas para teste
                 for (int codigoSalaReuniao = 1; codigoSalaReuniao < 4; codigoSalaReuniao++) {
                     SalaReuniao salaReuniao = new SalaReuniao();
                     salaReuniao.setCodigo(codigoSalaReuniao);
                     salaReuniao.setPredio(predio);
                     salaReuniao.setNumLugares(20 + codigoSalaReuniao + codigoPredio + codigoCampus);
-                    try {
-                        Repositorio.gravaSalaReuniao(salaReuniao);
-                    } catch (Exception ex) {
-                        System.out.println(ex.getMessage());
-                    }
-                    
+
+                    Repositorio.gravaSalaReuniao(salaReuniao);
+                    predio.getSalaReuniaos().add(salaReuniao);
+
                     Reserva reserva = new Reserva();
-                    reserva.setDataReserva(LocalDate.now());
+                    reserva.setDataReserva(LocalDate.now().plusDays(10 * codigoPredio + codigoSalaReuniao));
                     reserva.setHoraInicio(LocalTime.parse("11:00"));
                     reserva.setHoraFim(LocalTime.parse("12:00"));
                     reserva.setSalaReuniao(salaReuniao);
-                    reserva.setFuncionario(new Funcionario());
-                    reserva.getFuncionario().setCodigo(codigoPredio);
-                    reserva.getFuncionario().setCampus(campus);
-                    
+                    reserva.setFuncionario(funcionario);
                     reserva.setAssunto("Teste " + codigoSalaReuniao);
-                    try {
-                        Repositorio.gravaReserva(reserva);
-                    } catch (Exception ex) {
-                        System.out.println(ex.getMessage());
-                    }
-                    
+
                     ItemEquipamento itemEquipamento = new ItemEquipamento();
                     itemEquipamento.setReserva(reserva);
-                    itemEquipamento.getEquipamento().setCodigo(item);
-                    itemEquipamento.getEquipamento().setCampus(campus);
-                    item++;
-                    try {
-                        Repositorio.gravaItemEquipamento(itemEquipamento);
-                    } catch (Exception ex) {
-                        System.out.println(ex.getMessage());
-                    }
-                    
+                    Equipamento equipamento = new Equipamento();
+                    equipamento.setCodigo(codigoSalaReuniao);
+                    equipamento.setTipo(codigoSalaReuniao - 1);
+                    equipamento.setCampus(campus);
+                    itemEquipamento.setEquipamento(equipamento);
+
+                    Repositorio.gravaReserva(reserva);
+                    Repositorio.gravaItemEquipamento(itemEquipamento);
+                    reserva.getItemEquipamentos().add(itemEquipamento);
+                    salaReuniao.getReservas().add(reserva);
 
                 }
-            }
-            for (int codigoFuncionario = 1; codigoFuncionario < 11; codigoFuncionario++) {
-                Funcionario funcionario = new Funcionario();
-                funcionario.setCodigo(codigoFuncionario);
-                funcionario.setCampus(campus);
-                funcionario.setNome("Funcioánrio " + codigoFuncionario + " - Campus " + codigoCampus);
-                try {
-                    Repositorio.gravaFuncionario(funcionario);
-                } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
-                }
-
-            }
-            for (int codigoEquipamento = 1; codigoEquipamento < 200; codigoEquipamento++) {
-                Equipamento equipamento = new Equipamento();
-                equipamento.setCodigo(codigoEquipamento);
-                equipamento.getCampus().setCodigo(codigoCampus);
-//                equipamento.setNome("Equipamento " + codigoEquipamento + " - Campus " + codigoCampus);
-                try {
-                    Repositorio.gravaEquipamento(equipamento);
-                } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
-                }
-
             }
 
         }
@@ -145,7 +130,7 @@ public class Repositorio {
     private static ArrayList<Equipamento> equipamentos = new ArrayList<Equipamento>();
     private static ArrayList<Endereco> enderecos = new ArrayList<Endereco>();
     private static ArrayList<Reserva> reservas = new ArrayList<Reserva>();
-    private static ArrayList<ItemEquipamento> itemEquipamentos=new ArrayList<ItemEquipamento>();
+    private static ArrayList<ItemEquipamento> itemEquipamentos = new ArrayList<ItemEquipamento>();
 
 //<editor-fold defaultstate="collapsed" desc="crud campus">
     public static boolean consultaCampus(Campus campus) {
@@ -428,7 +413,7 @@ public class Repositorio {
             throw new Exception("Reserva já cadastrada.");
         }
         Reserva r = new Reserva(reserva);
-        reservas.add(r);
+        reservas.add(reserva);
         return true;
     }
 
@@ -491,14 +476,14 @@ public class Repositorio {
         if (consultaItemEquipamento(itemEquipamento)) {
             throw new Exception("Equipamento já reservado para essa data/horário.");
         }
-        ItemEquipamento re = new ItemEquipamento(itemEquipamento);
-        itemEquipamentos.add(re);
+//        ItemEquipamento re = new ItemEquipamento(itemEquipamento);
+        itemEquipamentos.add(itemEquipamento);
         return true;
     }
 
     public static boolean excluiItemEquipamento(ItemEquipamento itemEquipamento) throws Exception {
         if (!consultaItemEquipamento(itemEquipamento)) {
- 
+
             throw new Exception("Equipamento não reservado para essa data/horário.");
         }
         for (Iterator<ItemEquipamento> iterator = itemEquipamentos.iterator(); iterator.hasNext();) {
@@ -532,7 +517,7 @@ public class Repositorio {
 
         ArrayList<ItemEquipamento> p = new ArrayList<ItemEquipamento>();
         for (ItemEquipamento c : itemEquipamentos) {
-            if (c.getEquipamento().getCampus().getCodigo()== codigoCampus) {
+            if (c.getEquipamento().getCampus().getCodigo() == codigoCampus) {
                 p.add(c);
             }
         }

@@ -79,7 +79,7 @@ public class ItemEquipamento {
 
     @Override
     public String toString() {
-        return "ItemEquipamento{" + "reserva=" + reserva + ", equipamento=" + equipamento + '}';
+        return "" + equipamento + "";
     }
 
     

@@ -19,7 +19,7 @@ import java.util.Scanner;
  */
 public class Console {
 
-    private Repositorio bd = new Repositorio();
+    private Repositorio bd;
     private GeradorRelatorio relatorio = new GeradorRelatorio();
     private Equipamento equipamento = new Equipamento();
     private Funcionario funcionario = new Funcionario();
@@ -40,7 +40,11 @@ public class Console {
     private Scanner sc = new Scanner(System.in);
 
     public Console() {
-
+        try {
+            bd = new Repositorio();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     public void abreMenu() {
@@ -110,6 +114,7 @@ public class Console {
             } else if (Integer.parseInt(s) == 3) {
                 System.out.println("Digite os dados da reserva:\n");
                 obterDadosReserva();
+                registradorReserva.setReserva(reserva);
                 registarEquipamentos();
             } else if (Integer.parseInt(s) == 4) {
 //salas livres
@@ -178,7 +183,7 @@ public class Console {
 
     public void obterDadosReserva() {
         String s;
-
+        reserva = new Reserva();
         salaReuniao = new SalaReuniao();
 //        reserva = new Reserva();
         System.out.print("Digite um numero maior que zero para o predio:\n");
@@ -291,7 +296,6 @@ public class Console {
         salaReuniao.setCodigo(codigoSalaReuniao);
         salaReuniao.getPredio().setCodigo(codigoPredio);
         salaReuniao.getPredio().setCampus(campus);
-//        salaReuniao.getPredio().getCampus().setCodigo(campus.getCodigo());
 
         reserva.setSalaReuniao(salaReuniao);
         reserva.setDataReserva(dataReserva);
@@ -330,6 +334,8 @@ public class Console {
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
+            } else if (Integer.parseInt(s) == 0) {
+                break;
             } else {
                 System.out.println("Opção inválida");
             }
@@ -340,7 +346,7 @@ public class Console {
 
     public void obterDadosEquipamento() {
         String s;
-//        itemEquipamento = new ItemEquipamento();
+        itemEquipamento = new ItemEquipamento();
         System.out.print("Digite o código do equipamento:\n");
         s = sc.next();
         codigoEquipamento = Integer.parseInt(s);
@@ -350,6 +356,7 @@ public class Console {
         itemEquipamento.setReserva(reserva);
         try {
             registradorReserva.setItemEquipamento(itemEquipamento);
+            registradorReserva.setReserva(reserva);
         } catch (Exception ex) {
             System.out.print(ex.getMessage());
         }
