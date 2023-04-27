@@ -128,6 +128,8 @@ public class RegistradorReserva {
             }
 
         }
+        GeradorBD g = new GeradorBD("bookARoom.dat");
+        g.save(campuss);
         primeiroObjeto = true;
     }
 
