@@ -32,6 +32,7 @@ public class Console {
     private LocalTime horaFim = LocalTime.now();
     private Campus campus = new Campus();
     private int codigoEquipamento = 0;
+    private int tipoEquipamento;
     private boolean aula;
     private int diaSemana;
     private LocalDate dataFimSemestre;
@@ -131,6 +132,13 @@ public class Console {
                 relatorio.reservasInativas(campus);
             } else if (Integer.parseInt(s) == 8) {
 // cadastrar equipamento
+                obterDadosEquipamento();
+                try {
+                    RegistradorReserva.gravaEquipamento(equipamento);
+                    System.out.println("Equipamento gravado com sucesso.");
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
             } else if (Integer.parseInt(s) == 9) {
 // cadastrar aula
                 aula = true;
@@ -319,7 +327,7 @@ public class Console {
             }
             if (Integer.parseInt(s) == 1) {
                 try {
-                    obterDadosEquipamento();
+                    obterDadosItemEquipamento();
                     registradorReserva.gerarItemEquipamento();
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
@@ -327,7 +335,7 @@ public class Console {
 
             } else if (Integer.parseInt(s) == 2) {
                 try {
-                    obterDadosEquipamento();
+                    obterDadosItemEquipamento();
                     registradorReserva.cancelarItemEquipamento();
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
@@ -342,7 +350,7 @@ public class Console {
 
     }
 
-    public void obterDadosEquipamento() {
+    public void obterDadosItemEquipamento() {
         String s;
         itemEquipamento = new ItemEquipamento();
         System.out.print("Digite o código do equipamento:\n");
@@ -358,6 +366,49 @@ public class Console {
         } catch (Exception ex) {
             System.out.print(ex.getMessage());
         }
+    }
+
+    public void obterDadosEquipamento() {
+        String s;
+        itemEquipamento = new ItemEquipamento();
+        System.out.print("Digite o código do equipamento:\n");
+        while (sc.hasNext()) {
+            s = sc.next();
+            try {
+                int eInt = Integer.parseInt(s);
+                codigoEquipamento = Integer.parseInt(s);
+                if (codigoEquipamento > 0) {
+                    break;
+                } else {
+                    System.out.print("Código inválido. Digite um valor maior que zero\n");
+                }
+            } catch (Exception ex) {
+                System.out.print("Código inválido. Digite um valor maior que zero\n");
+            }
+        }
+        equipamento.setCodigo(codigoEquipamento);
+        equipamento.getCampus().setCodigo(campus.getCodigo());
+        System.out.print("Digite o tipo do equipamento:\n");
+        for (int i = 0; i < equipamento.getTipos().length; i++) {
+            System.out.print(i + " - " + equipamento.getTipos()[i] + "\n");
+        }
+        while (sc.hasNext()) {
+            s = sc.next();
+            try {
+                int eInt = Integer.parseInt(s);
+            } catch (Exception ex) {
+                s = "-1";
+            }
+            tipoEquipamento = Integer.parseInt(s);
+            try {
+                equipamento.setTipo(tipoEquipamento);
+                break;
+            } catch (Exception ex) {
+                System.out.print(ex.getMessage());
+            }
+
+        }
+
     }
 
 }

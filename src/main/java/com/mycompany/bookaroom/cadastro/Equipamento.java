@@ -76,15 +76,15 @@ public class Equipamento {
     }
 
     public void setTipo(int tipo) throws Exception {
-        this.tipo = tipo;
+        if (tipo < 0 || tipo >= tipos.length) {
+            throw new Exception("Tipo inválido. Digite um valor entre " + 0 + " e " + (tipos.length - 1) + ".\n");
+        }
         for (int t = 0; t < tipos.length; t++) {
             if (t == tipo) {
                 this.nome = tipos[t];
             }
         }
-        if (tipo < 0 || tipo >= tipos.length) {
-            throw new Exception("Tipo inválido.");
-        }
+        this.tipo = tipo;
     }
 
     public String[] getTipos() {
