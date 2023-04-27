@@ -1,6 +1,5 @@
 package com.mycompany.bookaroom;
 
-import com.mycompany.bookaroom.bd.Repositorio;
 import com.mycompany.bookaroom.util.RegistradorReserva;
 import com.mycompany.bookaroom.util.GeradorRelatorio;
 import com.mycompany.bookaroom.negocio.ItemEquipamento;
@@ -19,12 +18,11 @@ import java.util.Scanner;
  */
 public class Console {
 
-    private Repositorio bd;
     private GeradorRelatorio relatorio = new GeradorRelatorio();
     private Equipamento equipamento = new Equipamento();
     private Funcionario funcionario = new Funcionario();
     private SalaReuniao salaReuniao = new SalaReuniao();
-    private RegistradorReserva registradorReserva = new RegistradorReserva();
+    private RegistradorReserva registradorReserva;
     private Reserva reserva = new Reserva();
     private ItemEquipamento itemEquipamento = new ItemEquipamento();
     private int codigoPredio = 0;
@@ -41,7 +39,7 @@ public class Console {
 
     public Console() {
         try {
-            bd = new Repositorio();
+            registradorReserva = new RegistradorReserva();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -61,14 +59,14 @@ public class Console {
 //        s = sc.next();
 //        funcionario.setCodigo(Integer.parseInt(s));
         try {
-            campus = Repositorio.recuperaCampus(1);
-            funcionario = Repositorio.recuperaFuncionario(1, 1);
+            campus = RegistradorReserva.recuperaCampus(1);
+            funcionario = RegistradorReserva.recuperaFuncionario(1, 1);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return;
         }
 
-//        if (!Repositorio.consultaFuncionario(f)) {
+//        if (!RegistradorReserva.consultaFuncionario(f)) {
 //            System.out.println("Funcionário não cadstrado.");
 //            return;
 //        }
@@ -106,7 +104,7 @@ public class Console {
                 obterDadosReserva();
                 try {
                     registradorReserva.setReserva(reserva);
-                    registradorReserva.cancelarReserva();
+                    registradorReserva.cancelarReserva(reserva);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -306,7 +304,7 @@ public class Console {
 
     public void registarEquipamentos() {
         String s;
-        if (!Repositorio.consultaReserva(reserva)) {
+        if (!RegistradorReserva.consultaReserva(reserva)) {
             System.out.println("Reserva não cadastrada.");
             return;
         }

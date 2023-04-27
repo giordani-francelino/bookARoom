@@ -17,7 +17,6 @@
  */
 package com.mycompany.bookaroom.util;
 
-import com.mycompany.bookaroom.bd.Repositorio;
 import com.mycompany.bookaroom.negocio.ItemEquipamento;
 import com.mycompany.bookaroom.negocio.Reserva;
 import com.mycompany.bookaroom.cadastro.SalaReuniao;
@@ -40,7 +39,7 @@ public class GeradorRelatorio {
     private List<ItemEquipamento> itemEquipamentos = new ArrayList<ItemEquipamento>();
 
     public List<Reserva> reservasAtivas(Campus campus) {
-        reservas = Repositorio.listaReserva(campus.getCodigo());
+        reservas = RegistradorReserva.listaReserva(campus.getCodigo());
         Collections.sort(reservas);
         List<Reserva> r = new ArrayList<Reserva>();
         for (Reserva c : reservas) {
@@ -57,7 +56,7 @@ public class GeradorRelatorio {
     }
 
     public void reservasInativas(Campus campus) {
-        reservas = Repositorio.listaReserva(campus.getCodigo());
+        reservas = RegistradorReserva.listaReserva(campus.getCodigo());
         Collections.sort(reservas);
         List<Reserva> r = new ArrayList<Reserva>();
         for (Reserva c : reservas) {
@@ -76,16 +75,16 @@ public class GeradorRelatorio {
     }
 
     public List<Reserva> salasOcupadas(Campus campus) {
-        salaReuniaos = Repositorio.listaSalaReuniao(campus.getCodigo());
+        salaReuniaos = RegistradorReserva.listaSalaReuniao(campus.getCodigo());
         Collections.sort(salaReuniaos);
-        reservas = Repositorio.listaReserva(campus.getCodigo());
+        reservas = RegistradorReserva.listaReserva(campus.getCodigo());
         Collections.sort(reservas);
 
         return reservas;
     }
 
     public void salasLivres(Campus campus) {
-        salaReuniaos = Repositorio.listaSalaReuniao(campus.getCodigo());
+        salaReuniaos = RegistradorReserva.listaSalaReuniao(campus.getCodigo());
         Collections.sort(salaReuniaos);
         reservas = new ArrayList<Reserva>();
         reservas = reservasAtivas(campus);

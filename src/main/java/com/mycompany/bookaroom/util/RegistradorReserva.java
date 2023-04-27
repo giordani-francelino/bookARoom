@@ -17,7 +17,6 @@
  */
 package com.mycompany.bookaroom.util;
 
-import com.mycompany.bookaroom.bd.Repositorio;
 import com.mycompany.bookaroom.cadastro.Campus;
 import com.mycompany.bookaroom.cadastro.Endereco;
 import com.mycompany.bookaroom.cadastro.Equipamento;
@@ -36,6 +35,13 @@ import java.util.Iterator;
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
 public class RegistradorReserva {
+
+    private static boolean primeiroObjeto = false;
+    private static ArrayList<Campus> campuss = new ArrayList<Campus>();
+
+    private Reserva reserva;
+    private ItemEquipamento itemEquipamento;
+
     public RegistradorReserva() throws Exception {
         if (primeiroObjeto) {
             return;
@@ -55,7 +61,18 @@ public class RegistradorReserva {
             campus.setEndereco(endereco);
             endereco.setCampus(campus);
 
-            Repositorio.gravaCampus(campus);
+            RegistradorReserva.gravaCampus(campus);
+
+            for (int codigoFuncionario = 1; codigoFuncionario < 4; codigoFuncionario++) {
+
+                Funcionario funcionario = new Funcionario();
+                funcionario.setCodigo(codigoFuncionario);
+                funcionario.setCampus(campus);
+                funcionario.setNome("Funcionário " + codigoFuncionario + " - campus " + codigoCampus);
+
+                RegistradorReserva.gravaFuncionario(funcionario);
+//                campus.getFuncionarios().add(funcionario);
+            }
 
             for (int codigoEquipamento = 1; codigoEquipamento < 8; codigoEquipamento++) {
                 Equipamento equipamento = new Equipamento();
@@ -63,8 +80,8 @@ public class RegistradorReserva {
                 equipamento.setTipo(codigoEquipamento - 1);
                 equipamento.setCampus(campus);
 
-                Repositorio.gravaEquipamento(equipamento);
-                campus.getEquipamentos().add(equipamento);
+                RegistradorReserva.gravaEquipamento(equipamento);
+//                campus.getEquipamentos().add(equipamento);
             }
 
             for (int codigoPredio = 1; codigoPredio < 4; codigoPredio++) {
@@ -73,16 +90,8 @@ public class RegistradorReserva {
                 predio.setCampus(campus);
                 predio.setNome("Prédio" + codigoPredio + " - Campus " + codigoCampus);
 
-                Repositorio.gravaPredio(predio);
-                campus.getPredios().add(predio);
-
-                Funcionario funcionario = new Funcionario();
-                funcionario.setCodigo(codigoPredio);
-                funcionario.setCampus(campus);
-                funcionario.setNome("Funcionário " + codigoPredio + " - campus " + codigoCampus);
-
-                Repositorio.gravaFuncionario(funcionario);
-                campus.getFuncionarios().add(funcionario);
+                RegistradorReserva.gravaPredio(predio);
+//                campus.getPredios().add(predio);
 
 //              inclui salas para teste
                 for (int codigoSalaReuniao = 1; codigoSalaReuniao < 4; codigoSalaReuniao++) {
@@ -91,15 +100,15 @@ public class RegistradorReserva {
                     salaReuniao.setPredio(predio);
                     salaReuniao.setNumLugares(20 + codigoSalaReuniao + codigoPredio + codigoCampus);
 
-                    Repositorio.gravaSalaReuniao(salaReuniao);
-                    predio.getSalaReuniaos().add(salaReuniao);
+                    RegistradorReserva.gravaSalaReuniao(salaReuniao);
+//                    predio.getSalaReuniaos().add(salaReuniao);
 
                     Reserva reserva = new Reserva();
                     reserva.setDataReserva(LocalDate.now().plusDays(10 * codigoPredio + codigoSalaReuniao));
                     reserva.setHoraInicio(LocalTime.parse("11:00"));
                     reserva.setHoraFim(LocalTime.parse("12:00"));
                     reserva.setSalaReuniao(salaReuniao);
-                    reserva.setFuncionario(funcionario);
+                    reserva.setFuncionario(campus.getFuncionarios().get(1));
                     reserva.setAssunto("Teste " + codigoSalaReuniao);
 
                     ItemEquipamento itemEquipamento = new ItemEquipamento();
@@ -110,10 +119,10 @@ public class RegistradorReserva {
                     equipamento.setCampus(campus);
                     itemEquipamento.setEquipamento(equipamento);
 
-                    Repositorio.gravaReserva(reserva);
-                    Repositorio.gravaItemEquipamento(itemEquipamento);
-                    reserva.getItemEquipamentos().add(itemEquipamento);
-                    salaReuniao.getReservas().add(reserva);
+                    RegistradorReserva.gravaReserva(reserva);
+                    RegistradorReserva.gravaItemEquipamento(itemEquipamento);
+//                    reserva.getItemEquipamentos().add(itemEquipamento);
+//                    salaReuniao.getReservas().add(reserva);
 
                 }
             }
@@ -121,11 +130,6 @@ public class RegistradorReserva {
         }
         primeiroObjeto = true;
     }
-    private static boolean primeiroObjeto = false;
-    private static ArrayList<Campus> campuss = new ArrayList<Campus>();
-
-    private Reserva reserva;
-    private ItemEquipamento itemEquipamento;
 
 //<editor-fold defaultstate="collapsed" desc="geters and setters">
     public Reserva getReserva() {
@@ -147,7 +151,7 @@ public class RegistradorReserva {
 
 //</editor-fold>
     public boolean gerarReserva() throws Exception {
-        if (!Repositorio.consultaSalaReuniao(reserva.getSalaReuniao())) {
+        if (!RegistradorReserva.consultaSalaReuniao(reserva.getSalaReuniao())) {
             throw new Exception("Sala não cadastrada.");
         }
 
@@ -155,21 +159,22 @@ public class RegistradorReserva {
 //data2.compareTo(date1); //data2 > data1, retorna um valor maior que 0
 //data1.compareTo(date3); //data1 = data3, então um 0 será mostrado no console
         ArrayList<Reserva> reservas
-                = Repositorio.listaReserva(reserva.getSalaReuniao().getPredio().getCampus().getCodigo());
+                = RegistradorReserva.listaReserva(reserva.getSalaReuniao().getPredio().getCampus().getCodigo());
 
         for (Iterator<Reserva> iterator = reservas.iterator(); iterator.hasNext();) {
-            Reserva c = iterator.next();
-            if (c.getSalaReuniao().getCodigo() == reserva.getSalaReuniao().getCodigo()
-                    && c.getSalaReuniao().getPredio().getCodigo()
+            Reserva r = iterator.next();
+            if (r.getSalaReuniao().getCodigo() == reserva.getSalaReuniao().getCodigo()
+                    && r.getSalaReuniao().getPredio().getCodigo()
                     == reserva.getSalaReuniao().getPredio().getCodigo()
-                    && c.getSalaReuniao().getPredio().getCampus().getCodigo()
+                    && r.getSalaReuniao().getPredio().getCampus().getCodigo()
                     == reserva.getSalaReuniao().getPredio().getCampus().getCodigo()) {
-                if (reserva.getDataReserva().compareTo(c.getDataReserva()) == 0) {
-                    if ((reserva.getHoraInicio().compareTo(c.getHoraInicio()) >= 0
-                            && reserva.getHoraInicio().compareTo(c.getHoraFim()) <= 0)
-                            || (reserva.getHoraFim().compareTo(c.getHoraInicio()) >= 0
-                            && reserva.getHoraFim().compareTo(c.getHoraFim()) <= 0)) {
+                if (reserva.getDataReserva().compareTo(r.getDataReserva()) == 0) {
+                    if ((reserva.getHoraInicio().compareTo(r.getHoraInicio()) >= 0
+                            && reserva.getHoraInicio().compareTo(r.getHoraFim()) <= 0)
+                            || (reserva.getHoraFim().compareTo(r.getHoraInicio()) >= 0
+                            && reserva.getHoraFim().compareTo(r.getHoraFim()) <= 0)) {
                         if (reserva.isAula() == true) {
+                            cancelarReserva(r);
                             iterator.remove();
                         } else {
                             throw new Exception("Sala já reserva nesse horário");
@@ -178,7 +183,7 @@ public class RegistradorReserva {
                 }
             }
         }
-        Repositorio.gravaReserva(reserva);
+        RegistradorReserva.gravaReserva(reserva);
         if (reserva.isAula() == false) {
             System.out.print("Reserva gravada com sucesso.\n");
         }
@@ -186,30 +191,29 @@ public class RegistradorReserva {
 
     }
 
-    public boolean cancelarReserva() throws Exception {
-//ArrayList<ItemEquipamento> listaItemEquipamento(int codigoCampus)
+    public boolean cancelarReserva(Reserva r) throws Exception {
         ArrayList<ItemEquipamento> itemEquipamentos
-                = Repositorio.listaItemEquipamento(reserva.getSalaReuniao().getPredio().getCampus().getCodigo());
+                = RegistradorReserva.listaItemEquipamento(r.getSalaReuniao().getPredio().getCampus().getCodigo());
         for (ItemEquipamento c : itemEquipamentos) {
-            if (c.getReserva() == reserva) {
-                Repositorio.excluiItemEquipamento(c);
+            if (c.getReserva() == r) {
+                RegistradorReserva.excluiItemEquipamento(c);
 
             }
         }
-        Repositorio.excluiReserva(reserva);
+        RegistradorReserva.excluiReserva(r);
         System.out.println("Reserva cancelada com sucesso\n");
         return true;
     }
 
     public boolean gerarItemEquipamento() throws Exception {
-        if (!Repositorio.consultaEquipamento(itemEquipamento.getEquipamento())) {
+        if (!RegistradorReserva.consultaEquipamento(itemEquipamento.getEquipamento())) {
             throw new Exception("Equipamento não cadastrado.");
         }
-        if (!Repositorio.consultaReserva(itemEquipamento.getReserva())) {
+        if (!RegistradorReserva.consultaReserva(itemEquipamento.getReserva())) {
             throw new Exception("Reserva não cadastrada.");
         }
         ArrayList<ItemEquipamento> itemEquipamentos
-                = Repositorio.listaItemEquipamento(reserva.getSalaReuniao().getPredio().getCampus().getCodigo());
+                = RegistradorReserva.listaItemEquipamento(reserva.getSalaReuniao().getPredio().getCampus().getCodigo());
         for (ItemEquipamento c : itemEquipamentos) {
             if (itemEquipamento.getEquipamento().getCodigo() == c.getEquipamento().getCodigo()) {
                 if (c.getReserva().getDataReserva().compareTo(itemEquipamento.getReserva().getDataReserva()) == 0) {
@@ -225,13 +229,13 @@ public class RegistradorReserva {
             }
 
         }
-        Repositorio.gravaItemEquipamento(itemEquipamento);
+        RegistradorReserva.gravaItemEquipamento(itemEquipamento);
         System.out.println("Equipamento reservado com sucesso");
         return true;
     }
 
     public boolean cancelarItemEquipamento() throws Exception {
-        Repositorio.excluiItemEquipamento(itemEquipamento);
+        RegistradorReserva.excluiItemEquipamento(itemEquipamento);
         System.out.println("Reserva de equipamento cancelada com sucesso.");
 
         return true;
@@ -244,11 +248,571 @@ public class RegistradorReserva {
         }
         while (reserva.getDataReserva().compareTo(dataFimSemestre) <= 0) {
             gerarReserva();
+            reserva = new Reserva(reserva);
             reserva.setDataReserva(reserva.getDataReserva().plusDays(7));
         }
-
+        System.out.print("Reservas aulas gravadas com sucesso.\n");
         return true;
     }
+
+//
+////<editor-fold defaultstate="collapsed" desc="crud campus">
+    public static boolean consultaCampus(Campus campus) {
+        for (Campus c : campuss) {
+            if (campus.equals(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean gravaCampus(Campus campus) throws Exception {
+        if (consultaCampus(campus)) {
+            throw new Exception("Campus já cadastrado.");
+        }
+        campuss.add(campus);
+        return true;
+    }
+//
+//    public static boolean excluiCampus(Campus campus) throws Exception {
+//        if (!consultaCampus(campus)) {
+//            throw new Exception("Campus não cadastrado.");
+//        }
+//        for (Iterator<Campus> iterator = campuss.iterator(); iterator.hasNext();) {
+//            Campus c = iterator.next();
+//            if (campus.equals(c)) {
+//                iterator.remove();
+//                return true;
+//            }
+//        }
+//        return true;
+//    }
+//
+
+    public static Campus recuperaCampus(int codigoCampus) throws Exception {
+        for (Iterator<Campus> iterator = campuss.iterator(); iterator.hasNext();) {
+            Campus c = iterator.next();
+            if (c.getCodigo() == codigoCampus) {
+                return c;
+            }
+        }
+        throw new Exception("Campus não cadastrado.");
+    }
+//
+////</editor-fold>
+////<editor-fold defaultstate="collapsed" desc="crud predio">
+
+    public static boolean consultaPredio(Predio predio) {
+        for (Campus c : campuss) {
+            if (c.getCodigo() == predio.getCampus().getCodigo()) {
+                for (Predio p : c.getPredios()) {
+                    if (predio.equals(p)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean gravaPredio(Predio predio) throws Exception {
+        if (consultaPredio(predio)) {
+            throw new Exception("Predio já cadastrado.");
+        }
+        for (Campus c : campuss) {
+            if (c.getCodigo() == predio.getCampus().getCodigo()) {
+                c.getPredios().add(predio);
+            }
+        }
+        return true;
+    }
+
+//    public static boolean excluiPredio(Predio predio) throws Exception {
+//        if (!consultaPredio(predio)) {
+//            throw new Exception("Predio não cadastrado.");
+//        }
+//        for (Iterator<Predio> iterator = predios.iterator(); iterator.hasNext();) {
+//            Predio c = iterator.next();
+//            if (predio.equals(c)) {
+//                iterator.remove();
+//                return true;
+//            }
+//        }
+//        return true;
+//    }
+//
+//    public static Predio recuperaPredio(int codigoPredio, int codigoCampus) throws Exception {
+//        for (Iterator<Predio> iterator = predios.iterator(); iterator.hasNext();) {
+//            Predio c = iterator.next();
+//            if (c.getCodigo() == codigoPredio && c.getCampus().getCodigo() == codigoCampus) {
+//                return c;
+//            }
+//        }
+//        throw new Exception("Predio não cadastrado.");
+//    }
+//
+//    public static ArrayList<Predio> listaPredio(int codigoCampus) {
+//
+//        ArrayList<Predio> p = new ArrayList<Predio>();
+//        for (Predio c : predios) {
+//            if (c.getCampus().getCodigo() == codigoCampus) {
+//                p.add(c);
+//            }
+//        }
+//        return p;
+//    }
+//
+////</editor-fold>
+////<editor-fold defaultstate="collapsed" desc="crud salaReuniao">
+    public static boolean consultaSalaReuniao(SalaReuniao salaReuniao) {
+        for (Campus c : campuss) {
+            if (c.getCodigo() == salaReuniao.getPredio().getCampus().getCodigo()) {
+                for (Predio p : c.getPredios()) {
+                    if (p.getCodigo() == salaReuniao.getPredio().getCodigo()) {
+                        for (SalaReuniao s : p.getSalaReuniaos()) {
+                            if (salaReuniao.equals(s)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean gravaSalaReuniao(SalaReuniao salaReuniao) throws Exception {
+        if (consultaSalaReuniao(salaReuniao)) {
+            throw new Exception("SalaReuniao já cadastrada.");
+        }
+        for (Campus c : campuss) {
+            if (c.getCodigo() == salaReuniao.getPredio().getCampus().getCodigo()) {
+                for (Predio p : c.getPredios()) {
+                    if (p.getCodigo() == salaReuniao.getPredio().getCodigo()) {
+                        p.getSalaReuniaos().add(salaReuniao);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+//    public static boolean consultaSalaReuniao(SalaReuniao salaReuniao) {
+//        for (Iterator<SalaReuniao> iterator = salaReuniaos.iterator(); iterator.hasNext();) {
+//            SalaReuniao c = iterator.next();
+//            if (salaReuniao.equals(c)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//    public static boolean gravaSalaReuniao(SalaReuniao salaReuniao) throws Exception {
+//        if (consultaSalaReuniao(salaReuniao)) {
+//            throw new Exception("SalaReuniao já cadastrada." + salaReuniao);
+//        }
+//        salaReuniaos.add(salaReuniao);
+//        return true;
+//    }
+//
+//    public static boolean excluiSalaReuniao(SalaReuniao salaReuniao) throws Exception {
+//        if (!consultaSalaReuniao(salaReuniao)) {
+//            throw new Exception("Sala de Reuniao não cadastrada.");
+//        }
+//        for (Iterator<SalaReuniao> iterator = salaReuniaos.iterator(); iterator.hasNext();) {
+//            SalaReuniao c = iterator.next();
+//            if (salaReuniao.equals(c)) {
+//                iterator.remove();
+//                return true;
+//            }
+//        }
+//        return true;
+//    }
+//
+//    public static SalaReuniao recuperaSalaReuniao(int codigoSalaReuniao, int codigoPredio,
+//            int codigoCampus) throws Exception {
+//        for (Iterator<SalaReuniao> iterator = salaReuniaos.iterator(); iterator.hasNext();) {
+//            SalaReuniao c = iterator.next();
+//            if (c.getCodigo() == codigoSalaReuniao && c.getPredio().getCodigo()
+//                    == codigoPredio && c.getPredio().getCampus().getCodigo() == codigoCampus) {
+//                return c;
+//            }
+//        }
+//        throw new Exception("Sala de Reuniao não cadastrada.");
+//    }
+//
+    public static ArrayList<SalaReuniao> listaSalaReuniao(int codigoCampus) {
+        ArrayList<SalaReuniao> ss = new ArrayList<SalaReuniao>();
+        for (Campus c : campuss) {
+            for (Predio p : c.getPredios()) {
+                for (SalaReuniao s : p.getSalaReuniaos()) {
+                    ss.add(s);
+                }
+            }
+        }
+        return ss;
+    }
+//
+////</editor-fold>
+////<editor-fold defaultstate="collapsed" desc="crud funcionario">
+//    public static boolean consultaFuncionario(Funcionario funcionario) {
+//        for (Iterator<Funcionario> iterator = funcionarios.iterator(); iterator.hasNext();) {
+//            Funcionario c = iterator.next();
+//            if (funcionario.equals(c)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+
+    public static boolean consultaFuncionario(Funcionario funcionario) {
+        for (Campus c : campuss) {
+            if (c.getCodigo() == funcionario.getCampus().getCodigo()) {
+                for (Funcionario f : c.getFuncionarios()) {
+                    if (funcionario.equals(f)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean gravaFuncionario(Funcionario funcionario) throws Exception {
+        if (consultaFuncionario(funcionario)) {
+            throw new Exception("Funcionario já cadastrado.");
+        }
+        for (Campus c : campuss) {
+            if (c.getCodigo() == funcionario.getCampus().getCodigo()) {
+                c.getFuncionarios().add(funcionario);
+            }
+        }
+        return true;
+    }
+//
+
+    public static Funcionario recuperaFuncionario(int codigoFuncionario, int codigoCampus) throws Exception {
+        for (Campus c : campuss) {
+            if (c.getCodigo() == codigoCampus) {
+                for (Funcionario f : c.getFuncionarios()) {
+                    if (f.getCodigo() == codigoFuncionario) {
+                        return f;
+                    }
+                }
+            }
+        }
+        throw new Exception("Funcionário não cadastrado.");
+    }
+//
+//    public static ArrayList<Funcionario> listaFuncionario(int codigoCampus) {
+//
+//        ArrayList<Funcionario> p = new ArrayList<Funcionario>();
+//        for (Funcionario c : funcionarios) {
+//            if (c.getCampus().getCodigo() == codigoCampus) {
+//                p.add(c);
+//            }
+//        }
+//        return p;
+//    }
+//
+////</editor-fold>
+////<editor-fold defaultstate="collapsed" desc="crud equipamento">
+
+    public static boolean consultaEquipamento(Equipamento equipamento) {
+        for (Campus c : campuss) {
+            if (c.getCodigo() == equipamento.getCampus().getCodigo()) {
+                for (Equipamento e : c.getEquipamentos()) {
+                    if (equipamento.equals(e)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean gravaEquipamento(Equipamento equipamento) throws Exception {
+        if (consultaEquipamento(equipamento)) {
+            throw new Exception("Equipamento já cadastrado.");
+        }
+        for (Campus c : campuss) {
+            if (c.getCodigo() == equipamento.getCampus().getCodigo()) {
+                c.getEquipamentos().add(equipamento);
+            }
+        }
+        return true;
+    }
+//
+//    public static boolean excluiEquipamento(Equipamento equipamento) throws Exception {
+//        if (!consultaEquipamento(equipamento)) {
+//            throw new Exception("Equipamento não cadastrado.");
+//        }
+//        for (Iterator<Equipamento> iterator = equipamentos.iterator(); iterator.hasNext();) {
+//            Equipamento c = iterator.next();
+//            if (equipamento.equals(c)) {
+//                iterator.remove();
+//                return true;
+//            }
+//        }
+//        return true;
+//    }
+//
+//    public static Equipamento recuperaEquipamento(int codigoEquipamento, int codigoCampus) throws Exception {
+//        for (Iterator<Equipamento> iterator = equipamentos.iterator(); iterator.hasNext();) {
+//            Equipamento c = iterator.next();
+//            if (c.getCodigo() == codigoEquipamento && c.getCampus().getCodigo() == codigoCampus) {
+//                return c;
+//            }
+//        }
+//        throw new Exception("Equipamento não cadastrado.");
+//    }
+//
+//    public static ArrayList<Equipamento> listaEquipamento(int codigoCampus) {
+//
+//        ArrayList<Equipamento> p = new ArrayList<Equipamento>();
+//        for (Equipamento c : equipamentos) {
+//            if (c.getCampus().getCodigo() == codigoCampus) {
+//                p.add(c);
+//            }
+//        }
+//        return p;
+//    }
+//
+////</editor-fold>
+////<editor-fold defaultstate="collapsed" desc="crud reserva">
+
+    public static boolean consultaReserva(Reserva reserva) {
+        for (Campus c : campuss) {
+            if (c.getCodigo() == reserva.getSalaReuniao().getPredio().getCampus().getCodigo()) {
+                for (Predio p : c.getPredios()) {
+                    if (p.getCodigo() == reserva.getSalaReuniao().getPredio().getCodigo()) {
+                        for (SalaReuniao s : p.getSalaReuniaos()) {
+                            if (s.getCodigo() == reserva.getSalaReuniao().getCodigo()) {
+                                for (Reserva r : s.getReservas()) {
+                                    if (reserva.equals(r)) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+//
+
+    public static boolean gravaReserva(Reserva reserva) throws Exception {
+        if (consultaReserva(reserva)) {
+            throw new Exception("Reserva já cadastrada.");
+        }
+        for (Campus c : campuss) {
+            if (c.getCodigo() == reserva.getSalaReuniao().getPredio().getCampus().getCodigo()) {
+                for (Predio p : c.getPredios()) {
+                    if (p.getCodigo() == reserva.getSalaReuniao().getPredio().getCodigo()) {
+                        for (SalaReuniao s : p.getSalaReuniaos()) {
+                            if (s.getCodigo() == reserva.getSalaReuniao().getCodigo()) {
+                                s.getReservas().add(reserva);
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+//
+
+    public static boolean excluiReserva(Reserva reserva) throws Exception {
+
+        if (!consultaReserva(reserva)) {
+            throw new Exception("Sala não reserva nessa data-horário");
+        }
+
+        for (Campus c : campuss) {
+            if (c.getCodigo() == reserva.getSalaReuniao().getPredio().getCampus().getCodigo()) {
+                for (Predio p : c.getPredios()) {
+                    if (p.getCodigo() == reserva.getSalaReuniao().getPredio().getCodigo()) {
+                        for (SalaReuniao s : p.getSalaReuniaos()) {
+                            if (s.getCodigo() == reserva.getSalaReuniao().getCodigo()) {
+                                for (Iterator<Reserva> iterator = s.getReservas().iterator(); iterator.hasNext();) {
+                                    Reserva r = iterator.next();
+                                    if (reserva.equals(r)) {
+                                        iterator.remove();
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+//    public static Reserva recuperaReserva(int codigoSalaReuniao, int codigoPredio,
+//            int codigoCampus, LocalDate dataReserva, LocalTime horaInicio, LocalTime horaFim) throws Exception {
+//        for (Iterator<Reserva> iterator = reservas.iterator(); iterator.hasNext();) {
+//            Reserva c = iterator.next();
+//            if (c.getSalaReuniao().getCodigo() == codigoSalaReuniao
+//                    && c.getSalaReuniao().getPredio().getCodigo() == codigoPredio
+//                    && c.getSalaReuniao().getPredio().getCampus().getCodigo() == codigoCampus
+//                    && c.getDataReserva() == dataReserva
+//                    && c.getHoraInicio() == horaInicio
+//                    && c.getHoraFim() == horaFim) {
+//                return c;
+//            }
+//        }
+//        throw new Exception("Reserva não efetuada para essa data e hora.");
+//    }
+//
+    public static ArrayList<Reserva> listaReserva(int codigoCampus) {
+
+        ArrayList<Reserva> rs = new ArrayList<Reserva>();
+        for (Campus c : campuss) {
+            if (c.getCodigo() == codigoCampus) {
+                for (Predio p : c.getPredios()) {
+                    for (SalaReuniao s : p.getSalaReuniaos()) {
+                        for (Reserva r : s.getReservas()) {
+                            rs.add(r);
+                        }
+                    }
+                }
+            }
+        }
+        return rs;
+    }
+//
+////</editor-fold>
+////<editor-fold defaultstate="collapsed" desc="crud itemEquipamento">
+
+    public static boolean consultaItemEquipamento(ItemEquipamento itemEquipamento) {
+        for (Campus c : campuss) {
+            if (c.getCodigo() == itemEquipamento.getReserva().getSalaReuniao().getPredio().getCampus().getCodigo()) {
+                for (Predio p : c.getPredios()) {
+                    for (SalaReuniao s : p.getSalaReuniaos()) {
+                        for (Reserva r : s.getReservas()) {
+                            if (r.getDataReserva().compareTo(itemEquipamento.getReserva().getDataReserva()) == 0) {
+                                if ((r.getHoraInicio().compareTo(itemEquipamento.getReserva().getHoraInicio()) >= 0
+                                        && r.getHoraInicio().compareTo(itemEquipamento.getReserva().getHoraFim()) <= 0)
+                                        || (r.getHoraFim().compareTo(itemEquipamento.getReserva().getHoraInicio()) >= 0
+                                        && r.getHoraFim().compareTo(itemEquipamento.getReserva().getHoraFim()) <= 0)) {
+                                    for (ItemEquipamento ie : r.getItemEquipamentos()) {
+                                        if (ie.getEquipamento().getCodigo() == itemEquipamento.getEquipamento().getCodigo()) {
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+//
+
+    public static boolean gravaItemEquipamento(ItemEquipamento itemEquipamento) throws Exception {
+        if (consultaItemEquipamento(itemEquipamento)) {
+            throw new Exception("Equipamento já reservado para essa data/horário.");
+        }
+        for (Campus c : campuss) {
+            if (c.getCodigo() == itemEquipamento.getReserva().getSalaReuniao().getPredio().getCampus().getCodigo()) {
+                for (Predio p : c.getPredios()) {
+                    if (p.getCodigo() == itemEquipamento.getReserva().getSalaReuniao().getPredio().getCodigo()) {
+                        for (SalaReuniao s : p.getSalaReuniaos()) {
+                            if (s.getCodigo() == itemEquipamento.getReserva().getSalaReuniao().getCodigo()) {
+                                for (Reserva r : s.getReservas()) {
+                                    if (r.equals(itemEquipamento.getReserva())) {
+                                        r.getItemEquipamentos().add(itemEquipamento);
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+//
+
+    public static boolean excluiItemEquipamento(ItemEquipamento itemEquipamento) throws Exception {
+        if (!consultaItemEquipamento(itemEquipamento)) {
+            throw new Exception("Equipamento não reservado para essa data/horário.");
+        }
+        for (Campus c : campuss) {
+            if (c.getCodigo() == itemEquipamento.getReserva().getSalaReuniao().getPredio().getCampus().getCodigo()) {
+                for (Predio p : c.getPredios()) {
+                    if (p.getCodigo() == itemEquipamento.getReserva().getSalaReuniao().getPredio().getCodigo()) {
+                        for (SalaReuniao s : p.getSalaReuniaos()) {
+                            if (s.getCodigo() == itemEquipamento.getReserva().getSalaReuniao().getCodigo()) {
+                                for (Reserva r : s.getReservas()) {
+                                    if (r.equals(itemEquipamento.getReserva())) {
+                                        for (Iterator<ItemEquipamento> iterator = r.getItemEquipamentos().iterator(); iterator.hasNext();) {
+                                            ItemEquipamento ie = iterator.next();
+                                            if (itemEquipamento.equals(ie)) {
+                                                iterator.remove();
+                                                return true;
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+//
+//    public static ItemEquipamento recuperaItemEquipamento(int codigo, int codigoSalaReuniao, int codigoPredio,
+//            int codigoCampus, LocalDate dataReserva, LocalTime horaInicio, LocalTime horaFim) throws Exception {
+//        for (Iterator<ItemEquipamento> iterator = itemEquipamentos.iterator(); iterator.hasNext();) {
+//            ItemEquipamento c = iterator.next();
+//            if (c.getEquipamento().getCodigo() == codigo
+//                    && c.getReserva().getSalaReuniao().getCodigo() == codigoSalaReuniao
+//                    && c.getReserva().getSalaReuniao().getPredio().getCodigo() == codigoPredio
+//                    && c.getReserva().getSalaReuniao().getPredio().getCampus().getCodigo() == codigoCampus
+//                    && c.getReserva().getDataReserva() == dataReserva
+//                    && c.getReserva().getHoraInicio() == horaInicio
+//                    && c.getReserva().getHoraFim() == horaFim) {
+//                return c;
+//            }
+//        }
+//        throw new Exception("ItemEquipamento não efetuada para essa data e hora.");
+//    }
+//
+
+    public static ArrayList<ItemEquipamento> listaItemEquipamento(int codigoCampus) {
+
+        ArrayList<ItemEquipamento> ies = new ArrayList<ItemEquipamento>();
+
+        for (Campus c : campuss) {
+            if (c.getCodigo() == codigoCampus) {
+                for (Predio p : c.getPredios()) {
+                    for (SalaReuniao s : p.getSalaReuniaos()) {
+                        for (Reserva r : s.getReservas()) {
+                            for (ItemEquipamento ie : r.getItemEquipamentos()) {
+                                ies.add(ie);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return ies;
+    }
+//
+////</editor-fold>
 
 //    
 }

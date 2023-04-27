@@ -48,6 +48,7 @@ public class Reserva implements Comparable<Reserva> {
     }
 
     public Reserva(Reserva r) {
+        this();
         this.setDataReserva(r.getDataReserva());
         this.setHoraInicio(r.getHoraInicio());
         this.setHoraFim(r.getHoraFim());
