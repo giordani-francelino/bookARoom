@@ -19,6 +19,7 @@ package com.mycompany.bookaroom.negocio;
 
 import com.mycompany.bookaroom.cadastro.Funcionario;
 import com.mycompany.bookaroom.cadastro.SalaReuniao;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.Objects;
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
-public class Reserva implements Comparable<Reserva> {
+public class Reserva implements Comparable<Reserva>, Serializable {
 
     private LocalDate dataReserva;
     private LocalTime horaInicio;
@@ -38,7 +39,7 @@ public class Reserva implements Comparable<Reserva> {
     private SalaReuniao salaReuniao;
     private Funcionario funcionario;
     private boolean aula;
-    private List<ItemEquipamento>  itemEquipamentos;
+    private List<ItemEquipamento> itemEquipamentos;
 
     //<editor-fold defaultstate="collapsed" desc="construtores">
     public Reserva() {
@@ -124,8 +125,6 @@ public class Reserva implements Comparable<Reserva> {
         this.itemEquipamentos = itemEquipamentos;
     }
 
-    
-    
     //</editor-fold>
     @Override
     public String toString() {

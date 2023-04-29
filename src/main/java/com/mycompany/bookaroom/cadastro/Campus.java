@@ -28,6 +28,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ import java.util.List;
  */
 @Entity
 @Table
-public class Campus {
+public class Campus implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

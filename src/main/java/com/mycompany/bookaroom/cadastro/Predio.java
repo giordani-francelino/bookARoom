@@ -18,6 +18,7 @@
 package com.mycompany.bookaroom.cadastro;
 
 import com.mycompany.bookaroom.cadastro.Campus;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +27,7 @@ import java.util.Objects;
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
-public class Predio {
+public class Predio implements Serializable {
 
     private int codigo;
     private Campus campus;

@@ -36,7 +36,7 @@ public class GeradorRelatorio {
 
     private List<SalaReuniao> salaReuniaos = new ArrayList<SalaReuniao>();
     private List<Reserva> reservas = new ArrayList<Reserva>();
-    private List<ItemEquipamento> itemEquipamentos = new ArrayList<ItemEquipamento>();
+//    private List<ItemEquipamento> itemEquipamentos = new ArrayList<ItemEquipamento>();
 
     public List<Reserva> reservasAtivas(Campus campus) {
         reservas = RegistradorReserva.listaReserva(campus.getCodigo());
@@ -67,10 +67,9 @@ public class GeradorRelatorio {
                 r.add(c);
             }
         }
-                for (Reserva c : r) {
-                    System.out.println(c);
-                }
-
+        for (Reserva c : r) {
+            System.out.println(c);
+        }
 
     }
 

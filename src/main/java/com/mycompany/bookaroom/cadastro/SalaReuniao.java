@@ -19,6 +19,7 @@ package com.mycompany.bookaroom.cadastro;
 
 import com.mycompany.bookaroom.cadastro.Predio;
 import com.mycompany.bookaroom.negocio.Reserva;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import java.util.Objects;
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
-public class SalaReuniao implements Comparable<SalaReuniao> {
+public class SalaReuniao implements Comparable<SalaReuniao>, Serializable {
 
     private int codigo;
     private Predio predio;
@@ -83,11 +84,8 @@ public class SalaReuniao implements Comparable<SalaReuniao> {
     public void setReservas(List<Reserva> reservas) {
         this.reservas = reservas;
     }
-    
-    
-    
-//</editor-fold>
 
+//</editor-fold>
     @Override
     public String toString() {
         return "SalaReuniao{" + "codigo=" + codigo + ", predio=" + predio + ", numLugares=" + numLugares + '}';

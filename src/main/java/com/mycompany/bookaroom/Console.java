@@ -134,8 +134,7 @@ public class Console {
 // cadastrar equipamento
                 obterDadosEquipamento();
                 try {
-                    RegistradorReserva.gravaEquipamento(equipamento);
-                    System.out.println("Equipamento gravado com sucesso.");
+                    registradorReserva.gerarEquipamento(equipamento);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }

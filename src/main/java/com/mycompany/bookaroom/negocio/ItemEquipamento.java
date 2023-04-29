@@ -19,13 +19,14 @@ package com.mycompany.bookaroom.negocio;
 
 import com.mycompany.bookaroom.negocio.Reserva;
 import com.mycompany.bookaroom.cadastro.Equipamento;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
-public class ItemEquipamento {
+public class ItemEquipamento implements Serializable {
 
     private Reserva reserva;
     private Equipamento equipamento;

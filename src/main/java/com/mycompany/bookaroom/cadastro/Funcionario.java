@@ -18,13 +18,14 @@
 package com.mycompany.bookaroom.cadastro;
 
 import com.mycompany.bookaroom.cadastro.Campus;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
-public class Funcionario {
+public class Funcionario implements Serializable {
 
     private int codigo;
     private Campus campus;

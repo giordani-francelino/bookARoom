@@ -25,10 +25,13 @@ import com.mycompany.bookaroom.cadastro.Predio;
 import com.mycompany.bookaroom.cadastro.SalaReuniao;
 import com.mycompany.bookaroom.negocio.ItemEquipamento;
 import com.mycompany.bookaroom.negocio.Reserva;
+import com.mycompany.bookaroom.util.GeradorBD;
+import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -36,14 +39,15 @@ import java.util.Iterator;
  */
 public class RegistradorReserva {
 
-    private static boolean primeiroObjeto = false;
-    private static ArrayList<Campus> campuss = new ArrayList<Campus>();
-
+    private static List<Campus> campuss = new ArrayList<Campus>();
     private Reserva reserva;
     private ItemEquipamento itemEquipamento;
+    private GeradorBD geradorBD;
 
     public RegistradorReserva() throws Exception {
-        if (primeiroObjeto) {
+        geradorBD = new GeradorBD("bookARoom.dat");
+        campuss = geradorBD.load();
+        if (campuss.size() > 0) {
             return;
         }
         for (int codigoCampus = 1; codigoCampus < 4; codigoCampus++) {
@@ -128,7 +132,7 @@ public class RegistradorReserva {
             }
 
         }
-        primeiroObjeto = true;
+        geradorBD.save(campuss);
     }
 
 //<editor-fold defaultstate="collapsed" desc="geters and setters">
@@ -151,10 +155,12 @@ public class RegistradorReserva {
 
 //</editor-fold>
     public boolean gerarReserva() throws Exception {
+        if (reserva.isAula() == false) {
+            campuss = geradorBD.load();
+        }
         if (!RegistradorReserva.consultaSalaReuniao(reserva.getSalaReuniao())) {
             throw new Exception("Sala não cadastrada.");
         }
-
 //data1.compareTo(date2); //data1 < data2, retorna um valor menor que 0
 //data2.compareTo(date1); //data2 > data1, retorna um valor maior que 0
 //data1.compareTo(date3); //data1 = data3, então um 0 será mostrado no console
@@ -185,6 +191,7 @@ public class RegistradorReserva {
         }
         RegistradorReserva.gravaReserva(reserva);
         if (reserva.isAula() == false) {
+            geradorBD.save(campuss);
             System.out.print("Reserva gravada com sucesso.\n");
         }
         return true;
@@ -192,20 +199,22 @@ public class RegistradorReserva {
     }
 
     public boolean cancelarReserva(Reserva r) throws Exception {
+        campuss = geradorBD.load();
         ArrayList<ItemEquipamento> itemEquipamentos
                 = RegistradorReserva.listaItemEquipamento(r.getSalaReuniao().getPredio().getCampus().getCodigo());
         for (ItemEquipamento c : itemEquipamentos) {
             if (c.getReserva() == r) {
                 RegistradorReserva.excluiItemEquipamento(c);
-
             }
         }
         RegistradorReserva.excluiReserva(r);
+        geradorBD.save(campuss);
         System.out.println("Reserva cancelada com sucesso\n");
         return true;
     }
 
     public boolean gerarItemEquipamento() throws Exception {
+        campuss = geradorBD.load();
         if (!RegistradorReserva.consultaEquipamento(itemEquipamento.getEquipamento())) {
             throw new Exception("Equipamento não cadastrado.");
         }
@@ -230,19 +239,21 @@ public class RegistradorReserva {
 
         }
         RegistradorReserva.gravaItemEquipamento(itemEquipamento);
+        geradorBD.save(campuss);
         System.out.println("Equipamento reservado com sucesso");
         return true;
     }
 
     public boolean cancelarItemEquipamento() throws Exception {
+        campuss = geradorBD.load();
         RegistradorReserva.excluiItemEquipamento(itemEquipamento);
         System.out.println("Reserva de equipamento cancelada com sucesso.");
-
+        geradorBD.save(campuss);
         return true;
     }
 
     public boolean gerarReservaAula(LocalDate dataFimSemestre, int diaSemana) throws Exception {
-
+        campuss = geradorBD.load();
         while (reserva.getDataReserva().getDayOfWeek().getValue() != diaSemana) {
             reserva.setDataReserva(reserva.getDataReserva().plusDays(1));
         }
@@ -251,12 +262,21 @@ public class RegistradorReserva {
             reserva = new Reserva(reserva);
             reserva.setDataReserva(reserva.getDataReserva().plusDays(7));
         }
+        geradorBD.save(campuss);
         System.out.print("Reservas aulas gravadas com sucesso.\n");
         return true;
     }
 
+    public boolean gerarEquipamento(Equipamento e) throws Exception {
+        campuss = geradorBD.load();
+        RegistradorReserva.gravaEquipamento(e);
+        geradorBD.save(campuss);
+        System.out.println("Equipamento gravado com sucesso.");
+        return true;
+    }
 //
 ////<editor-fold defaultstate="collapsed" desc="crud campus">
+
     public static boolean consultaCampus(Campus campus) {
         for (Campus c : campuss) {
             if (campus.equals(c)) {

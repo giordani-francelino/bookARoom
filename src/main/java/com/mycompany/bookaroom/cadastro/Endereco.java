@@ -10,12 +10,13 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.PrimaryKeyJoinColumns;
 import jakarta.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
-public class Endereco {
+public class Endereco implements Serializable {
 
     
     

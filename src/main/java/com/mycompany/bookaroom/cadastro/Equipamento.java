@@ -17,13 +17,14 @@
  */
 package com.mycompany.bookaroom.cadastro;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
-public class Equipamento {
+public class Equipamento implements Serializable {
 
     private int codigo;
     private Campus campus;
