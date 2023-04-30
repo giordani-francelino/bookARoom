@@ -43,8 +43,9 @@ public class RegistradorReserva {
     private Reserva reserva;
     private ItemEquipamento itemEquipamento;
     private GeradorBD geradorBD;
+    private static RegistradorReserva instance;
 
-    public RegistradorReserva() throws Exception {
+    private RegistradorReserva() throws Exception {
         geradorBD = new GeradorBD("bookARoom.dat");
         campuss = geradorBD.load();
         if (campuss.size() > 0) {
@@ -136,6 +137,13 @@ public class RegistradorReserva {
     }
 
 //<editor-fold defaultstate="collapsed" desc="geters and setters">
+    public static RegistradorReserva getInstance() throws Exception {
+        if (instance == null) {
+            instance = new RegistradorReserva();
+        }
+        return instance;
+    }
+
     public Reserva getReserva() {
         return reserva;
 
@@ -153,6 +161,16 @@ public class RegistradorReserva {
         this.itemEquipamento = new ItemEquipamento(itemEquipamento);
     }
 
+    public static List<Campus> getCampuss() {
+        return campuss;
+    }
+
+    public static void setCampuss(List<Campus> campuss) {
+        RegistradorReserva.campuss = campuss;
+    }
+
+    
+    
 //</editor-fold>
     public boolean gerarReserva() throws Exception {
         if (reserva.isAula() == false) {

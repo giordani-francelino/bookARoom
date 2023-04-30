@@ -40,7 +40,7 @@ public class Console {
 
     public Console() {
         try {
-            registradorReserva = new RegistradorReserva();
+            registradorReserva =  RegistradorReserva.getInstance();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

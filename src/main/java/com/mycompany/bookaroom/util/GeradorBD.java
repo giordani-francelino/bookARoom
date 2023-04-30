@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class GeradorBD {
+
     private String filename = "out.dat";
 
     public GeradorBD(String filename) {
@@ -20,8 +21,11 @@ public class GeradorBD {
         try {
             ObjectOutputStream file = new ObjectOutputStream(new FileOutputStream(filename));
             for (Campus campus : campuss) {
-                file.writeObject(campus);
+                if (campus != null) {
+                    file.writeObject(campus);
+                }
             }
+            file.writeObject(null);
             file.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
