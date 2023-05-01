@@ -18,25 +18,25 @@ import java.util.Scanner;
  */
 public class Console {
 
-    private GeradorRelatorio geradorRelatorio = new GeradorRelatorio();
-    private Equipamento equipamento = new Equipamento();
-    private Funcionario funcionario = new Funcionario();
-    private SalaReuniao salaReuniao = new SalaReuniao();
-    private RegistradorReserva registradorReserva;
-    private Reserva reserva = new Reserva();
-    private ItemEquipamento itemEquipamento = new ItemEquipamento();
     private int codigoPredio = 0;
     private int codigoSalaReuniao = 0;
-    private LocalDate dataReserva = LocalDate.now();
-    private LocalTime horaInicio = LocalTime.now();
-    private LocalTime horaFim = LocalTime.now();
-    private Campus campus = new Campus();
     private int codigoEquipamento = 0;
     private int tipoEquipamento;
     private boolean aula;
     private int diaSemana;
+    private RegistradorReserva registradorReserva;
+    private GeradorRelatorio geradorRelatorio;
+    private Campus campus;
+    private Equipamento equipamento;
+    private Funcionario funcionario;
+    private SalaReuniao salaReuniao;
+    private Reserva reserva;
+    private ItemEquipamento itemEquipamento;
+    private LocalDate dataReserva;
+    private LocalTime horaInicio;
+    private LocalTime horaFim;
     private LocalDate dataFimSemestre;
-    private Scanner sc = new Scanner(System.in);
+    private Scanner sc;
 
     public Console() {
         try {
@@ -44,6 +44,19 @@ public class Console {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+        geradorRelatorio = new GeradorRelatorio();
+        campus = new Campus();
+        equipamento = new Equipamento();
+        funcionario = new Funcionario();
+        salaReuniao = new SalaReuniao();
+        reserva = new Reserva();
+        itemEquipamento = new ItemEquipamento();
+        dataReserva = LocalDate.now();
+        horaInicio = LocalTime.now();
+        horaFim = LocalTime.now();
+        dataFimSemestre = LocalDate.now();
+        sc = new Scanner(System.in);
+
     }
 
     public void abreMenu() {

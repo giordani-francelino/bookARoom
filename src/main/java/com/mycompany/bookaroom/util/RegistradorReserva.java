@@ -26,7 +26,6 @@ import com.mycompany.bookaroom.cadastro.SalaReuniao;
 import com.mycompany.bookaroom.reservas.ItemEquipamento;
 import com.mycompany.bookaroom.reservas.Reserva;
 import com.mycompany.bookaroom.bd.GeradorBD;
-import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
