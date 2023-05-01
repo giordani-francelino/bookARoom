@@ -18,7 +18,7 @@
 package com.mycompany.bookaroom.cadastro;
 
 import com.mycompany.bookaroom.cadastro.Predio;
-import com.mycompany.bookaroom.negocio.Reserva;
+import com.mycompany.bookaroom.reservas.Reserva;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;

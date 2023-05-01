@@ -2,8 +2,8 @@ package com.mycompany.bookaroom;
 
 import com.mycompany.bookaroom.util.RegistradorReserva;
 import com.mycompany.bookaroom.util.GeradorRelatorio;
-import com.mycompany.bookaroom.negocio.ItemEquipamento;
-import com.mycompany.bookaroom.negocio.Reserva;
+import com.mycompany.bookaroom.reservas.ItemEquipamento;
+import com.mycompany.bookaroom.reservas.Reserva;
 import com.mycompany.bookaroom.cadastro.Equipamento;
 import com.mycompany.bookaroom.cadastro.Funcionario;
 import com.mycompany.bookaroom.cadastro.SalaReuniao;
@@ -18,7 +18,7 @@ import java.util.Scanner;
  */
 public class Console {
 
-    private GeradorRelatorio relatorio = new GeradorRelatorio();
+    private GeradorRelatorio geradorRelatorio = new GeradorRelatorio();
     private Equipamento equipamento = new Equipamento();
     private Funcionario funcionario = new Funcionario();
     private SalaReuniao salaReuniao = new SalaReuniao();
@@ -40,7 +40,7 @@ public class Console {
 
     public Console() {
         try {
-            registradorReserva =  RegistradorReserva.getInstance();
+            registradorReserva = RegistradorReserva.getInstance();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -117,19 +117,19 @@ public class Console {
                 registarEquipamentos();
             } else if (Integer.parseInt(s) == 4) {
 //salas livres
-                relatorio.salasLivres(campus);
+                geradorRelatorio.salasLivres(campus);
 
             } else if (Integer.parseInt(s) == 5) {
 // salas ocupadas
-                relatorio.reservasAtivas(campus);
+                geradorRelatorio.salasOcupadas(campus);
 
             } else if (Integer.parseInt(s) == 6) {
 //reservas ativas
-                relatorio.reservasAtivas(campus);
+                geradorRelatorio.reservasAtivas(campus);
 
             } else if (Integer.parseInt(s) == 7) {
 // reservas inativas
-                relatorio.reservasInativas(campus);
+                geradorRelatorio.reservasInativas(campus);
             } else if (Integer.parseInt(s) == 8) {
 // cadastrar equipamento
                 obterDadosEquipamento();

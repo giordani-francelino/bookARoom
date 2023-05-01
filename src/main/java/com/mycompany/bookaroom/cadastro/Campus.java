@@ -36,33 +36,18 @@ import java.util.List;
  *
  * @author Your Name &lt;francelino at ifnmg&gt;
  */
-@Entity
-@Table
 public class Campus implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int codigo;
 
-    @NotNull
-    @Column(length = 100)
     private String nome;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "campus_codigo")
     private List<Predio> predios;
 
-    @OneToMany(mappedBy = "campus", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "campus_codigo")
     private List<Equipamento> equipamentos;
 
-    @OneToMany(mappedBy = "campus", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "campus_codigo")
     private List<Funcionario> funcionarios;
 
-    @NotNull
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "endreco_codigo")
     private Endereco endereco;
 
     //<editor-fold defaultstate="collapsed" desc="construtores">

@@ -17,8 +17,9 @@
  */
 package com.mycompany.bookaroom.util;
 
-import com.mycompany.bookaroom.negocio.ItemEquipamento;
-import com.mycompany.bookaroom.negocio.Reserva;
+import com.mycompany.bookaroom.bd.GeradorBD;
+import com.mycompany.bookaroom.reservas.ItemEquipamento;
+import com.mycompany.bookaroom.reservas.Reserva;
 import com.mycompany.bookaroom.cadastro.SalaReuniao;
 import com.mycompany.bookaroom.cadastro.Campus;
 import java.time.LocalDate;
@@ -34,11 +35,21 @@ import java.util.List;
  */
 public class GeradorRelatorio {
 
-    private List<SalaReuniao> salaReuniaos = new ArrayList<SalaReuniao>();
-    private List<Reserva> reservas = new ArrayList<Reserva>();
+    private GeradorBD geradorBD;
+    private List<SalaReuniao> salaReuniaos;
+    private List<Reserva> reservas;
 //    private List<ItemEquipamento> itemEquipamentos = new ArrayList<ItemEquipamento>();
 
-    public List<Reserva> reservasAtivas(Campus campus) {
+    public GeradorRelatorio() {
+        this.geradorBD = new GeradorBD();
+        this.salaReuniaos = new ArrayList<SalaReuniao>();
+        this.reservas = new ArrayList<Reserva>();
+
+    }
+
+//    public List<Reserva> reservasAtivas(Campus campus) {
+    public void reservasAtivas(Campus campus) {
+        RegistradorReserva.setCampuss(geradorBD.load());
         reservas = RegistradorReserva.listaReserva(campus.getCodigo());
         Collections.sort(reservas);
         List<Reserva> r = new ArrayList<Reserva>();
@@ -52,10 +63,11 @@ public class GeradorRelatorio {
         for (Reserva c : r) {
             System.out.println(c);
         }
-        return r;
+//        return r;
     }
 
     public void reservasInativas(Campus campus) {
+        RegistradorReserva.setCampuss(geradorBD.load());
         reservas = RegistradorReserva.listaReserva(campus.getCodigo());
         Collections.sort(reservas);
         List<Reserva> r = new ArrayList<Reserva>();
@@ -73,20 +85,58 @@ public class GeradorRelatorio {
 
     }
 
-    public List<Reserva> salasOcupadas(Campus campus) {
+//    public List<Reserva> salasOcupadas(Campus campus) {
+    public void salasOcupadas(Campus campus) {
+        RegistradorReserva.setCampuss(geradorBD.load());
         salaReuniaos = RegistradorReserva.listaSalaReuniao(campus.getCodigo());
         Collections.sort(salaReuniaos);
         reservas = RegistradorReserva.listaReserva(campus.getCodigo());
         Collections.sort(reservas);
 
-        return reservas;
+        for (SalaReuniao s : salaReuniaos) {
+            int i = 0;
+            for (Reserva r : reservas) {
+                if (s.equals(r.getSalaReuniao())) {
+                    if ((r.getDataReserva().compareTo(LocalDate.now()) == 0
+                            && r.getHoraFim().compareTo(LocalTime.now()) >= 0)
+                            || r.getDataReserva().compareTo(LocalDate.now()) > 0) {
+                        if (i == 0) {
+                            System.out.println("Campus: " + r.getSalaReuniao().getPredio().getCampus().getCodigo()
+                                    + " Predio: " + r.getSalaReuniao().getPredio().getCodigo()
+                                    + " Sala: " + r.getSalaReuniao().getCodigo()
+                                    + " Ocupada: "
+                            );
+
+                        }
+                        System.out.println("     Data " + r.getDataReserva()
+                                + " Hora início " + r.getHoraInicio()
+                                + " Hora fim " + r.getHoraFim()
+                        );
+                        i++;
+                    }
+                }
+            }
+        }
+
+//        return reservas;
     }
 
     public void salasLivres(Campus campus) {
+        RegistradorReserva.setCampuss(geradorBD.load());
         salaReuniaos = RegistradorReserva.listaSalaReuniao(campus.getCodigo());
         Collections.sort(salaReuniaos);
-        reservas = new ArrayList<Reserva>();
-        reservas = reservasAtivas(campus);
+//        reservas = new ArrayList<Reserva>();
+        reservas = RegistradorReserva.listaReserva(campus.getCodigo());
+        Collections.sort(reservas);
+        List<Reserva> ra = new ArrayList<Reserva>();
+        for (Reserva c : reservas) {
+            if ((c.getDataReserva().compareTo(LocalDate.now()) == 0
+                    && c.getHoraFim().compareTo(LocalTime.now()) >= 0)
+                    || c.getDataReserva().compareTo(LocalDate.now()) > 0) {
+                ra.add(c);
+            }
+        }
+        reservas = ra;
         List<Reserva> r = new ArrayList<Reserva>();
 
         for (int i = 0; i < salaReuniaos.size(); i++) {

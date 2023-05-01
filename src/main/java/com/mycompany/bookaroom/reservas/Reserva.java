@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.mycompany.bookaroom.negocio;
+package com.mycompany.bookaroom.reservas;
 
 import com.mycompany.bookaroom.cadastro.Funcionario;
 import com.mycompany.bookaroom.cadastro.SalaReuniao;

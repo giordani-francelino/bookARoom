@@ -1,4 +1,4 @@
-package com.mycompany.bookaroom.util;
+package com.mycompany.bookaroom.bd;
 
 import com.mycompany.bookaroom.cadastro.Campus;
 import java.io.FileInputStream;
@@ -11,7 +11,11 @@ import java.util.ArrayList;
 
 public class GeradorBD {
 
-    private String filename = "out.dat";
+    private String filename = "bookARoom.dat";
+
+    public GeradorBD() {
+
+    }
 
     public GeradorBD(String filename) {
         this.filename = filename;

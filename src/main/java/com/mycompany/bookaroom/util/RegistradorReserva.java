@@ -23,9 +23,9 @@ import com.mycompany.bookaroom.cadastro.Equipamento;
 import com.mycompany.bookaroom.cadastro.Funcionario;
 import com.mycompany.bookaroom.cadastro.Predio;
 import com.mycompany.bookaroom.cadastro.SalaReuniao;
-import com.mycompany.bookaroom.negocio.ItemEquipamento;
-import com.mycompany.bookaroom.negocio.Reserva;
-import com.mycompany.bookaroom.util.GeradorBD;
+import com.mycompany.bookaroom.reservas.ItemEquipamento;
+import com.mycompany.bookaroom.reservas.Reserva;
+import com.mycompany.bookaroom.bd.GeradorBD;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -39,14 +39,16 @@ import java.util.List;
  */
 public class RegistradorReserva {
 
-    private static List<Campus> campuss = new ArrayList<Campus>();
+    private static List<Campus> campuss;
     private Reserva reserva;
     private ItemEquipamento itemEquipamento;
     private GeradorBD geradorBD;
     private static RegistradorReserva instance;
 
     private RegistradorReserva() throws Exception {
-        geradorBD = new GeradorBD("bookARoom.dat");
+        reserva = new Reserva();
+        itemEquipamento = new ItemEquipamento();
+        geradorBD = new GeradorBD();
         campuss = geradorBD.load();
         if (campuss.size() > 0) {
             return;
@@ -169,8 +171,6 @@ public class RegistradorReserva {
         RegistradorReserva.campuss = campuss;
     }
 
-    
-    
 //</editor-fold>
     public boolean gerarReserva() throws Exception {
         if (reserva.isAula() == false) {
@@ -482,10 +482,13 @@ public class RegistradorReserva {
     public static ArrayList<SalaReuniao> listaSalaReuniao(int codigoCampus) {
         ArrayList<SalaReuniao> ss = new ArrayList<SalaReuniao>();
         for (Campus c : campuss) {
-            for (Predio p : c.getPredios()) {
-                for (SalaReuniao s : p.getSalaReuniaos()) {
-                    ss.add(s);
+            if (c.getCodigo() == codigoCampus) {
+                for (Predio p : c.getPredios()) {
+                    for (SalaReuniao s : p.getSalaReuniaos()) {
+                        ss.add(s);
+                    }
                 }
+                return ss;
             }
         }
         return ss;
