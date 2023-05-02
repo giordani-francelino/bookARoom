@@ -2,6 +2,8 @@ Aplicação de padrões de projeto:
 Facade: Classe Console
 Singleton: Classe RegistardorReserva
 
+Os tipos de equipamento possíveis estão em um arranjo inicializado no construtor da classe Equipamento.
+Os novos tipos de equipamentos podem ser inseridos nesse arranjo. Apenas nesse arranjo.
 
 Casos de teste:
 
