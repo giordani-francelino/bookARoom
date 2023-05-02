@@ -197,8 +197,14 @@ public class RegistradorReserva {
                             || (reserva.getHoraFim().compareTo(r.getHoraInicio()) >= 0
                             && reserva.getHoraFim().compareTo(r.getHoraFim()) <= 0)) {
                         if (reserva.isAula() == true) {
-                            cancelarReserva(r);
-                            iterator.remove();
+                            ArrayList<ItemEquipamento> itemEquipamentos
+                                    = RegistradorReserva.listaItemEquipamento(r.getSalaReuniao().getPredio().getCampus().getCodigo());
+                            for (ItemEquipamento ie : itemEquipamentos) {
+                                if (ie.getReserva() == r) {
+                                    RegistradorReserva.excluiItemEquipamento(ie);
+                                }
+                            }
+                            RegistradorReserva.excluiReserva(r);
                         } else {
                             throw new Exception("Sala já reserva nesse horário");
                         }

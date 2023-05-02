@@ -1,0 +1,95 @@
+Aplicação de padrões de projeto:
+Facade: Classe Console
+Singleton: Classe RegistardorReserva
+
+
+Casos de teste:
+
+Caso de teste 1 - efetuar reserva em data/horário ainda não reservado:
+Menu: 1 - Efetuar Reserva
+Digite um numero maior que zero para o predio:
+1
+Digite um numero maior que zero para a sala:
+1
+Digite a data da reserva no formato 'aaaa-mm-dd':
+2023-06-30
+Digite a hora de início no formato 'hh:mm':
+13:00
+Digite a hora final no formato 'hh:mm':
+14:00
+Digite o assunto da reserva:
+Reserva 1
+Retorno:
+Reserva gravada com sucesso.
+
+Caso de teste 2 - efetuar reserva em data/horário já reservado:
+Após executar Caso de teste 1
+Menu: 1 - Efetuar reserva
+Digite um numero maior que zero para o predio:
+1
+Digite um numero maior que zero para a sala:
+1
+Digite a data da reserva no formato 'aaaa-mm-dd':
+2023-06-30
+Digite a hora de início no formato 'hh:mm':
+13:30
+Digite a hora final no formato 'hh:mm':
+14:00
+Digite o assunto da reserva:
+Reserva 2
+Retorno:
+Sala já reserva nesse horário
+
+
+Caso de teste 3 - cadastar aula em data/horário reservado anteriormente:
+Após executar Caso de teste 1
+Menu: 9 - Cadastrar aulas
+Digite um numero maior que zero para o predio:
+1
+Digite um numero maior que zero para a sala:
+1
+Digite a data início do semestre no formato 'aaaa-mm-dd':
+2023-05-02
+Digite a data fim do semestre no formato 'aaaa-mm-dd':
+2023-07-05
+Digite o dia da semana da aula:
+1-segunda 2-terca 3-quarta 4-quinta 5-sexta 6-sábado:
+5
+Digite a hora de início no formato 'hh:mm':
+13:20
+Digite a hora final no formato 'hh:mm':
+15:00
+Retorno:
+Reservas aulas gravadas com sucesso.
+
+Caso teste 3 - cadastrar equipamento não cadastrado
+Menu: 8 - Cadastrar equipamentos
+Digite o código do equipamento:
+12
+Digite o tipo do equipamento:
+0 - apontador a laser e passador de slides
+1 - áudio e vídeo
+2 - caixa de som
+3 - controle de ar condicionado
+4 - impressora 3D
+5 - mesa
+6 - notebook
+1
+Retorno:
+Equipamento gravado com sucesso.
+
+Caso teste 3 - cadastrar equipamento não cadastrado
+Menu: 8 - Cadastrar equipamentos
+Digite o código do equipamento:
+12
+Digite o tipo do equipamento:
+0 - apontador a laser e passador de slides
+1 - áudio e vídeo
+2 - caixa de som
+3 - controle de ar condicionado
+4 - impressora 3D
+5 - mesa
+6 - notebook
+4
+Retorno:
+Equipamento já cadastrado.
